@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
+  // shadcn CLI 读的是这份根配置，缺了 paths 会把组件写进字面量的 @/ 目录
+  "compilerOptions": {
+    "paths": { "@/*": ["./src/*"] }
+  }
+}
