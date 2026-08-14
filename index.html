@@ -7,6 +7,13 @@
     <meta name="theme-color" content="#05060a" />
     <meta name="description" content="FDEC 2026 前沿部署工程师大会 · 圆桌话题分组与选座" />
     <title>FDEC 2026 · 圆桌选座</title>
+    <script>
+      // 首屏就定好主题，避免刷新时先闪一下暗色再变亮色；没存过就按品牌调性默认暗色
+      try {
+        var t = localStorage.getItem('fdec-theme')
+        document.documentElement.classList.toggle('dark', t ? t === 'dark' : true)
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

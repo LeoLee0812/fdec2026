@@ -90,7 +90,7 @@ export function VenueMap({ topics, myTopicId, onOpen }: Props) {
                   <span
                     className="grid size-[38%] place-items-center rounded-full font-mono text-[clamp(15px,4.6vw,28px)] font-black leading-none backdrop-blur-[2px]"
                     style={{
-                      color: full ? '#7d859b' : '#fff',
+                      color: full ? '#8b93a7' : '#fff',
                       background: 'rgba(5,6,10,.55)',
                       boxShadow: `0 0 20px ${full ? 'transparent' : a.soft}`,
                     }}
@@ -104,9 +104,9 @@ export function VenueMap({ topics, myTopicId, onOpen }: Props) {
               <span
                 className="-mt-1.5 flex items-center gap-0.5 whitespace-nowrap rounded-full border px-1.5 py-0.5 text-[9.5px] font-bold sm:-mt-2 sm:gap-1 sm:px-2.5 sm:py-1 sm:text-[11.5px]"
                 style={{
-                  borderColor: mine ? a.main : full ? '#2a3040' : `${a.main}55`,
-                  color: mine ? a.main : full ? '#6b7285' : '#c3cad9',
-                  background: mine ? a.soft : 'rgba(5,6,10,.75)',
+                  borderColor: mine ? a.main : full ? 'var(--color-line)' : 'var(--color-line)',
+                  color: mine ? a.main : full ? 'var(--color-fog)' : 'var(--color-fg)',
+                  background: mine ? a.soft : 'var(--color-panel)',
                 }}
               >
                 {mine && <Check className="size-2.5 sm:size-3" />}
@@ -114,7 +114,7 @@ export function VenueMap({ topics, myTopicId, onOpen }: Props) {
               </span>
 
               {/* 手机上不显示话题名，靠桌号认位；想看话题去「列表」页 */}
-              <p className="mt-2 hidden line-clamp-2 px-1 text-center text-[12px] leading-snug text-fog transition group-hover:text-white/85 sm:block">
+              <p className="mt-2 hidden line-clamp-2 px-1 text-center text-[12px] leading-snug text-fog transition group-hover:text-fg/90 sm:block">
                 {t.title}
               </p>
             </button>

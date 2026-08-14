@@ -73,7 +73,7 @@ export function Login({ onBack, onLoggedIn, siteKey }: Props) {
 
   return (
     <div ref={root} className="bg-aurora bg-grid relative min-h-dvh px-5 pb-[calc(30px+env(safe-area-inset-bottom))] pt-5">
-      <button onClick={onBack} className="flex items-center gap-1 py-2 text-sm text-fog hover:text-white">
+      <button onClick={onBack} className="flex items-center gap-1 py-2 text-sm text-fog hover:text-fg">
         <ChevronLeft className="size-4" />
         返回
       </button>
@@ -140,7 +140,7 @@ export function Login({ onBack, onLoggedIn, siteKey }: Props) {
             <Button
               onClick={submit}
               disabled={busy}
-              className="lg-field h-12 w-full rounded-xl bg-gradient-to-r from-cyan to-violet text-base font-bold text-ink hover:opacity-90"
+              className="lg-field h-12 w-full rounded-xl bg-gradient-to-r from-cyan to-violet text-base font-bold text-white hover:opacity-90"
             >
               {busy ? <Loader2 className="size-4 animate-spin" /> : '进入选座'}
             </Button>

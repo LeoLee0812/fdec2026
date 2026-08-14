@@ -23,11 +23,12 @@ export type VenueState = {
 
 export type AccentKey = 'cyan' | 'violet' | 'magenta' | 'amber'
 
+/** 具体色值写在 index.css 的两套主题变量里，这里只引用，切主题时自动跟随 */
 export const ACCENT: Record<AccentKey, { main: string; soft: string; deep: string }> = {
-  cyan: { main: '#38e1ff', soft: 'rgba(56,225,255,.16)', deep: '#0d4c60' },
-  violet: { main: '#8b5cff', soft: 'rgba(139,92,255,.16)', deep: '#3a2377' },
-  magenta: { main: '#ff4fd8', soft: 'rgba(255,79,216,.16)', deep: '#6d1a5c' },
-  amber: { main: '#ffb638', soft: 'rgba(255,182,56,.16)', deep: '#6b4409' },
+  cyan: { main: 'var(--ac-cyan)', soft: 'var(--ac-cyan-soft)', deep: 'var(--ac-cyan-deep)' },
+  violet: { main: 'var(--ac-violet)', soft: 'var(--ac-violet-soft)', deep: 'var(--ac-violet-deep)' },
+  magenta: { main: 'var(--ac-magenta)', soft: 'var(--ac-magenta-soft)', deep: 'var(--ac-magenta-deep)' },
+  amber: { main: 'var(--ac-amber)', soft: 'var(--ac-amber-soft)', deep: 'var(--ac-amber-deep)' },
 }
 
 export class ApiError extends Error {

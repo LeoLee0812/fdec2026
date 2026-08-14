@@ -31,7 +31,7 @@ export function TopicList({ topics, myTopicId, onOpen }: Props) {
           <button
             key={t.id}
             onClick={() => onOpen(t)}
-            className="tp-card group relative overflow-hidden rounded-2xl border border-line bg-panel/70 p-4 text-left transition hover:border-white/25 hover:bg-panel"
+            className="tp-card group relative overflow-hidden rounded-2xl border border-line bg-panel/70 p-4 text-left transition hover:border-fg/25 hover:bg-panel"
             style={mine ? { borderColor: a.main, boxShadow: `0 0 26px ${a.soft}` } : undefined}
           >
             <div className="flex items-start justify-between gap-3">
@@ -53,14 +53,14 @@ export function TopicList({ topics, myTopicId, onOpen }: Props) {
               )}
             </div>
 
-            <h3 className="mt-3 line-clamp-2 min-h-[44px] text-[15px] font-bold leading-snug text-white/92">{t.title}</h3>
+            <h3 className="mt-3 line-clamp-2 min-h-[44px] text-[15px] font-bold leading-snug text-fg/92">{t.title}</h3>
 
             <div className="mt-3 flex items-center gap-2 text-[12px] text-fog">
               <Users className="size-3.5" />
               {t.capacity} 人圆桌 · 已坐 {t.taken.length} 人
             </div>
 
-            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/8">
+            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-fg/10">
               <i className="block h-full rounded-full transition-all" style={{ width: `${pct}%`, background: a.main }} />
             </div>
           </button>

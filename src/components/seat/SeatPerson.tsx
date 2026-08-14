@@ -87,7 +87,7 @@ export function SeatPerson({ seatNo, angle, x, y, name, mine, isOwner, accent, o
       </g>
 
       {/* 头像 */}
-      <circle r="16" fill={`url(#${gid})`} stroke={mine ? '#fff' : av.ring} strokeOpacity={mine ? 1 : 0.55} strokeWidth={mine ? 2.4 : 1.4} />
+      <circle r="16" fill={`url(#${gid})`} stroke={mine ? 'var(--color-fg)' : av.ring} strokeOpacity={mine ? 1 : 0.55} strokeWidth={mine ? 2.4 : 1.4} />
       <g transform={`rotate(${-angle})`}>
         <text textAnchor="middle" y="5.5" fontSize="15" fontWeight="700" fill="#0b0e16">
           {av.initial}
@@ -100,8 +100,8 @@ export function SeatPerson({ seatNo, angle, x, y, name, mine, isOwner, accent, o
           textAnchor="middle"
           fontSize="13.5"
           fontWeight="600"
-          fill={mine ? '#fff' : '#c8cfdd'}
-          stroke="#05060a"
+          fill={mine ? 'var(--color-fg)' : 'var(--color-fg)'}
+          stroke="var(--color-ink)"
           strokeWidth="3.5"
           paintOrder="stroke"
         >
@@ -115,7 +115,7 @@ export function SeatPerson({ seatNo, angle, x, y, name, mine, isOwner, accent, o
             fontWeight="700"
             fill={a.main}
             letterSpacing="1"
-            stroke="#05060a"
+            stroke="var(--color-ink)"
             strokeWidth="3"
             paintOrder="stroke"
           >

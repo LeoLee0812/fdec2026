@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { gsap, useGSAP, prefersReducedMotion } from '@/lib/gsap'
 import { Typewriter } from './Typewriter'
 import { ArrowRight, CalendarDays, MapPin, Users } from 'lucide-react'
+import { ThemeToggle } from './ThemeToggle'
 
 type Props = {
   onStart: () => void
@@ -59,10 +60,13 @@ export function Cover({ onStart, entryText, stats }: Props) {
 
       <div className="relative mx-auto flex min-h-dvh max-w-2xl flex-col px-6 pb-[calc(28px+env(safe-area-inset-bottom))] pt-7">
         <div className="cv-mark flex items-center justify-between">
-          <img src="/openfde-wordmark.png" alt="OpenFDE" className="h-7 opacity-95" />
-          <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1 font-mono text-[11px] tracking-widest text-fog">
-            2026.08.22
-          </span>
+          <img src="/openfde-wordmark.png" alt="OpenFDE" className="h-7 opacity-95 invert dark:invert-0" />
+          <div className="flex items-center gap-2">
+            <span className="rounded-full border border-[var(--hairline)] bg-fg/5 px-3 py-1 font-mono text-[11px] tracking-widest text-fog">
+              2026.08.22
+            </span>
+            <ThemeToggle />
+          </div>
         </div>
 
         <div className="flex flex-1 flex-col justify-center py-12">
@@ -92,7 +96,7 @@ export function Cover({ onStart, entryText, stats }: Props) {
             </p>
           </div>
 
-          <div className="scanlines relative mt-8 overflow-hidden rounded-xl border border-line bg-ink-2/80 px-4 py-3.5 text-[13.5px] text-white/85">
+          <div className="scanlines relative mt-8 overflow-hidden rounded-xl border border-line bg-ink-2/80 px-4 py-3.5 text-[13.5px] text-fg/85">
             <Typewriter
               lines={[
                 '正在载入会场平面图...',
@@ -103,13 +107,13 @@ export function Cover({ onStart, entryText, stats }: Props) {
           </div>
         </div>
 
-        <div className="cv-stat grid grid-cols-3 border-y border-white/12">
+        <div className="cv-stat grid grid-cols-3 border-y border-[var(--hairline)]">
           {[
             { v: stats.tables, l: '圆桌话题' },
             { v: stats.seats, l: '开放座位' },
             { v: stats.left, l: '尚有空位' },
           ].map((s) => (
-            <div key={s.l} className="border-r border-white/12 px-2 py-4 last:border-r-0">
+            <div key={s.l} className="border-r border-[var(--hairline)] px-2 py-4 last:border-r-0">
               <strong className="block text-[26px] font-black leading-none">{s.v}</strong>
               <span className="mt-1.5 block text-[11px] tracking-wider text-fog">{s.l}</span>
             </div>
@@ -118,7 +122,7 @@ export function Cover({ onStart, entryText, stats }: Props) {
 
         <button
           onClick={onStart}
-          className="cv-cta mt-6 flex h-14 w-full items-center justify-between rounded-2xl bg-white px-5 text-base font-bold text-ink transition hover:bg-white/90"
+          className="cv-cta mt-6 flex h-14 w-full items-center justify-between rounded-2xl bg-fg px-5 text-base font-bold text-ink transition hover:opacity-90"
         >
           {entryText}
           <span className="grid size-8 place-items-center rounded-full bg-gradient-to-br from-cyan to-violet text-white">

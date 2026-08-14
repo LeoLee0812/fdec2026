@@ -12,6 +12,7 @@
   --color-panel: #11141d;
   --color-line: #232838;
   --color-fog: #8b93a7;
+  --color-fg: #e8ecf5;
   --color-cyan: #38e1ff;
   --color-violet: #8b5cff;
   --color-magenta: #ff4fd8;
@@ -23,7 +24,6 @@
 }
 
 :root {
-  color-scheme: only dark;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -58,6 +58,60 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* ---------- 明暗两套主题：同名变量在 html.dark / html:not(.dark) 各给一套值 ----------
+   切换时 GSAP 会把这些变量以内联样式补间到目标值，动画结束再清掉内联值、交回 class 接管 */
+.dark {
+  color-scheme: dark;
+  --color-ink: #05060a;
+  --color-ink-2: #0b0d14;
+  --color-panel: #11141d;
+  --color-line: #232838;
+  --color-fog: #8b93a7;
+  --color-fg: #e8ecf5;
+  --hairline: rgba(255, 255, 255, 0.12);
+  --grid-line: rgba(255, 255, 255, 0.045);
+  --veil: rgba(5, 6, 10, 0.75);
+  /* 强调色：暗色用霓虹原色 */
+  --ac-cyan: #38e1ff;
+  --ac-cyan-soft: rgba(56, 225, 255, 0.16);
+  --ac-cyan-deep: #0d4c60;
+  --ac-violet: #8b5cff;
+  --ac-violet-soft: rgba(139, 92, 255, 0.16);
+  --ac-violet-deep: #3a2377;
+  --ac-magenta: #ff4fd8;
+  --ac-magenta-soft: rgba(255, 79, 216, 0.16);
+  --ac-magenta-deep: #6d1a5c;
+  --ac-amber: #ffb638;
+  --ac-amber-soft: rgba(255, 182, 56, 0.16);
+  --ac-amber-deep: #6b4409;
+}
+
+html:not(.dark) {
+  color-scheme: light;
+  --color-ink: #eef1f6;
+  --color-ink-2: #ffffff;
+  --color-panel: #ffffff;
+  --color-line: #dde2ec;
+  --color-fog: #66708a;
+  --color-fg: #10131b;
+  --hairline: rgba(16, 19, 27, 0.12);
+  --grid-line: rgba(16, 19, 27, 0.05);
+  --veil: rgba(255, 255, 255, 0.78);
+  /* 强调色：亮色下必须压暗一档，霓虹原色在白底上根本看不清 */
+  --ac-cyan: #0a8fb8;
+  --ac-cyan-soft: rgba(10, 143, 184, 0.12);
+  --ac-cyan-deep: #cbeaf5;
+  --ac-violet: #6a3ce0;
+  --ac-violet-soft: rgba(106, 60, 224, 0.12);
+  --ac-violet-deep: #ded3ff;
+  --ac-magenta: #cf159c;
+  --ac-magenta-soft: rgba(207, 21, 156, 0.12);
+  --ac-magenta-deep: #ffd6f4;
+  --ac-amber: #a56a00;
+  --ac-amber-soft: rgba(165, 106, 0, 0.13);
+  --ac-amber-deep: #ffe6bd;
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }
@@ -71,7 +125,7 @@ body,
 body {
   margin: 0;
   background: var(--color-ink);
-  color: #e8ecf5;
+  color: var(--color-fg);
   font-family: var(--font-sans);
   overscroll-behavior-y: none;
 }
@@ -85,6 +139,15 @@ body {
     var(--color-ink);
 }
 
+/* 亮色下极光要收敛，不然整页发糊 */
+html:not(.dark) .bg-aurora {
+  background:
+    radial-gradient(1100px 620px at 82% -6%, rgba(139, 92, 255, 0.13), transparent 62%),
+    radial-gradient(900px 560px at 6% 12%, rgba(56, 225, 255, 0.12), transparent 60%),
+    radial-gradient(760px 520px at 50% 108%, rgba(255, 79, 216, 0.1), transparent 62%),
+    var(--color-ink);
+}
+
 .bg-grid::before {
   content: "";
   position: absolute;
@@ -92,10 +155,19 @@ body {
   pointer-events: none;
   opacity: 0.5;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 46px 46px;
   mask-image: linear-gradient(to bottom, #000 0%, transparent 88%);
+}
+
+/* 主题切换时从点击点扩散的圆形遮罩 */
+#theme-ripple {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  clip-path: circle(0px at 50% 50%);
 }
 
 /* 扫描线，给终端/代码区用 */
@@ -114,6 +186,10 @@ body {
 
 .text-glow {
   text-shadow: 0 0 22px rgba(56, 225, 255, 0.42);
+}
+
+html:not(.dark) .text-glow {
+  text-shadow: none;
 }
 
 /* 渐变标题，取海报里 FDE 三个字母的配色 */

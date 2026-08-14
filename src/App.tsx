@@ -17,6 +17,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { LayoutGrid, LogOut, Map, RotateCcw } from 'lucide-react'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 type View = 'cover' | 'login' | 'main'
 type Pending = { kind: 'select'; topic: Topic; seatNo: number } | { kind: 'cancel' } | null
@@ -130,7 +131,7 @@ export default function App() {
       <header className="sticky top-0 z-30 border-b border-line bg-ink/85 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <button onClick={() => setView('cover')} className="flex items-center gap-2.5">
-            <img src="/openfde-mark.png" alt="OpenFDE" className="size-6" />
+            <img src="/openfde-mark.png" alt="OpenFDE" className="size-6 invert dark:invert-0" />
             <span className="whitespace-nowrap text-[13px] font-bold tracking-wide">
               FDEC 2026<span className="hidden sm:inline"> · 圆桌选座</span>
             </span>
@@ -139,20 +140,21 @@ export default function App() {
             <div className="flex rounded-lg border border-line p-0.5">
               <button
                 onClick={() => setTab('map')}
-                className={`flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-1.5 text-[12px] ${tab === 'map' ? 'bg-white/12 text-white' : 'text-fog'}`}
+                className={`flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-1.5 text-[12px] ${tab === 'map' ? 'bg-fg/10 text-fg' : 'text-fog'}`}
               >
                 <Map className="size-3.5" />
                 平面图
               </button>
               <button
                 onClick={() => setTab('list')}
-                className={`flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-1.5 text-[12px] ${tab === 'list' ? 'bg-white/12 text-white' : 'text-fog'}`}
+                className={`flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-1.5 text-[12px] ${tab === 'list' ? 'bg-fg/10 text-fg' : 'text-fog'}`}
               >
                 <LayoutGrid className="size-3.5" />
                 列表
               </button>
             </div>
-            <Button variant="ghost" size="icon" onClick={logout} className="text-fog hover:text-white" title="退出">
+            <ThemeToggle />
+            <Button variant="ghost" size="icon" onClick={logout} className="text-fog hover:text-fg" title="退出">
               <LogOut className="size-4" />
             </Button>
           </div>
@@ -224,7 +226,7 @@ export default function App() {
       )}
 
       <Dialog open={!!pending} onOpenChange={(o) => !o && setPending(null)}>
-        <DialogContent className="border-line bg-panel">
+        <DialogContent className="max-w-[19.5rem] rounded-2xl border-line bg-panel sm:max-w-sm">
           <DialogHeader>
             <DialogTitle>{pending?.kind === 'cancel' ? '取消当前座位？' : '确认坐这个位置？'}</DialogTitle>
             <DialogDescription className="text-fog">
@@ -242,7 +244,7 @@ export default function App() {
             <Button variant="outline" onClick={() => setPending(null)} className="border-line bg-transparent">
               再想想
             </Button>
-            <Button onClick={commit} className="bg-gradient-to-r from-cyan to-violet font-bold text-ink">
+            <Button onClick={commit} className="bg-gradient-to-r from-cyan to-violet font-bold text-white">
               确认
             </Button>
           </DialogFooter>

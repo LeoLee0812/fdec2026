@@ -30,7 +30,7 @@ export function TableDetail({ topic, hasSeatElsewhere, onClose, onPickSeat, onCa
   return (
     <div ref={root} className="fixed inset-0 z-40 overflow-y-auto bg-ink/97 backdrop-blur-sm">
       <div className="mx-auto max-w-3xl px-4 pb-[calc(40px+env(safe-area-inset-bottom))] pt-4">
-        <button onClick={onClose} className="flex items-center gap-1 py-2 text-sm text-fog hover:text-white">
+        <button onClick={onClose} className="flex items-center gap-1 py-2 text-sm text-fog hover:text-fg">
           <ChevronLeft className="size-4" />
           返回全场
         </button>
@@ -48,10 +48,10 @@ export function TableDetail({ topic, hasSeatElsewhere, onClose, onPickSeat, onCa
             {topic.description || '围绕这个主题自由交流，欢迎带着你的经验、问题和好奇心加入。'}
           </p>
           <div className="mt-4 flex items-center justify-between text-[13px]">
-            <span className="text-white/80">
+            <span className="text-fg/80">
               {topic.capacity} 人圆桌 · 已坐 <b>{topic.taken.length}</b> 人
             </span>
-            <span style={{ color: left ? a.main : '#ff4fd8' }} className="font-bold">
+            <span style={{ color: left ? a.main : 'var(--ac-magenta)' }} className="font-bold">
               {left ? `还剩 ${left} 个座位` : '本桌已坐满'}
             </span>
           </div>
