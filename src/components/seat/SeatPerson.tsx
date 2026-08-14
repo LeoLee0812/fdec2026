@@ -95,12 +95,30 @@ export function SeatPerson({ seatNo, angle, x, y, name, mine, isOwner, accent, o
       </g>
 
       {/* 名字标签：先沿局部 -y 推到桌外（避免压住笔记本），再反旋转保持水平可读 */}
-      <g transform={`translate(0 -32) rotate(${-angle})`}>
-        <text textAnchor="middle" fontSize="13.5" fontWeight="600" fill={mine ? '#fff' : '#c8cfdd'}>
+      <g transform={`translate(0 -44) rotate(${-angle})`}>
+        <text
+          textAnchor="middle"
+          fontSize="13.5"
+          fontWeight="600"
+          fill={mine ? '#fff' : '#c8cfdd'}
+          stroke="#05060a"
+          strokeWidth="3.5"
+          paintOrder="stroke"
+        >
           {mine ? '我' : name}
         </text>
         {isOwner && (
-          <text textAnchor="middle" y="-17" fontSize="10.5" fontWeight="700" fill={a.main} letterSpacing="1">
+          <text
+            textAnchor="middle"
+            y="-17"
+            fontSize="10.5"
+            fontWeight="700"
+            fill={a.main}
+            letterSpacing="1"
+            stroke="#05060a"
+            strokeWidth="3"
+            paintOrder="stroke"
+          >
             话题发起人
           </text>
         )}

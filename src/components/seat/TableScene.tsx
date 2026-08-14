@@ -117,7 +117,7 @@ export function TableScene({ topic, onPickSeat, onCancelSeat }: Props) {
   return (
     <svg
       ref={root}
-      viewBox="55 45 510 535"
+      viewBox="55 28 510 552"
       className="w-full max-w-[600px] mx-auto touch-manipulation select-none"
       role="img"
       aria-label={`${topic.table_no} 号桌座位图`}
