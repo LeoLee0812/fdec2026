@@ -44,13 +44,14 @@ export function VenueMap({ topics, myTopicId, onOpen }: Props) {
   return (
     <div ref={root} className="mx-auto max-w-4xl px-1 py-2">
       {/* 舞台 */}
-      <div className="vm-stage mx-auto mb-8 max-w-lg rounded-2xl border border-cyan/35 bg-gradient-to-b from-cyan/12 to-transparent px-6 py-4 text-center">
-        <p className="text-[17px] font-black tracking-[0.3em] text-cyan text-glow">舞台 / 主讲区</p>
-        <p className="mt-1 text-[11.5px] tracking-widest text-fog">FDEC 2026 · 湖畔良仓 21 号楼</p>
+      <div className="vm-stage mx-auto mb-5 max-w-lg rounded-2xl border border-cyan/35 bg-gradient-to-b from-cyan/12 to-transparent px-4 py-3 text-center sm:mb-8 sm:px-6 sm:py-4">
+        <p className="text-[15px] font-black tracking-[0.28em] text-cyan text-glow sm:text-[17px]">舞台 / 主讲区</p>
+        <p className="mt-1 text-[10.5px] tracking-widest text-fog sm:text-[11.5px]">FDEC 2026 · 湖畔良仓 21 号楼</p>
       </div>
 
       {/* 20 张桌子 */}
-      <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4">
+      {/* 固定 4 列 × 5 行，和现场摆位一一对应，手机上也不改列数（改了就不是「平面图」了） */}
+      <div className="grid grid-cols-4 gap-x-1.5 gap-y-3 sm:gap-x-5 sm:gap-y-6">
         {topics.map((t) => {
           const a = ACCENT[t.accent]
           const left = t.capacity - t.taken.length
@@ -87,7 +88,7 @@ export function VenueMap({ topics, myTopicId, onOpen }: Props) {
                 {/* 桌号叠在桌面中央 */}
                 <div className="pointer-events-none absolute inset-0 grid place-items-center">
                   <span
-                    className="grid size-[34%] place-items-center rounded-full font-mono text-[clamp(20px,4.4vw,28px)] font-black leading-none backdrop-blur-[2px]"
+                    className="grid size-[38%] place-items-center rounded-full font-mono text-[clamp(15px,4.6vw,28px)] font-black leading-none backdrop-blur-[2px]"
                     style={{
                       color: full ? '#7d859b' : '#fff',
                       background: 'rgba(5,6,10,.55)',
@@ -101,18 +102,19 @@ export function VenueMap({ topics, myTopicId, onOpen }: Props) {
 
               {/* 状态徽章 */}
               <span
-                className="-mt-2 flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11.5px] font-bold"
+                className="-mt-1.5 flex items-center gap-0.5 whitespace-nowrap rounded-full border px-1.5 py-0.5 text-[9.5px] font-bold sm:-mt-2 sm:gap-1 sm:px-2.5 sm:py-1 sm:text-[11.5px]"
                 style={{
                   borderColor: mine ? a.main : full ? '#2a3040' : `${a.main}55`,
                   color: mine ? a.main : full ? '#6b7285' : '#c3cad9',
                   background: mine ? a.soft : 'rgba(5,6,10,.75)',
                 }}
               >
-                {mine && <Check className="size-3" />}
-                {mine ? '我的桌' : full ? '已坐满' : `余 ${left} 座`}
+                {mine && <Check className="size-2.5 sm:size-3" />}
+                {mine ? '我的桌' : full ? '坐满' : `余 ${left}`}
               </span>
 
-              <p className="mt-2 line-clamp-2 px-1 text-center text-[12px] leading-snug text-fog transition group-hover:text-white/85">
+              {/* 手机上不显示话题名，靠桌号认位；想看话题去「列表」页 */}
+              <p className="mt-2 hidden line-clamp-2 px-1 text-center text-[12px] leading-snug text-fog transition group-hover:text-white/85 sm:block">
                 {t.title}
               </p>
             </button>

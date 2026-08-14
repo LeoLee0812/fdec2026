@@ -131,20 +131,22 @@ export default function App() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <button onClick={() => setView('cover')} className="flex items-center gap-2.5">
             <img src="/openfde-mark.png" alt="OpenFDE" className="size-6" />
-            <span className="text-[13px] font-bold tracking-wide">FDEC 2026 · 圆桌选座</span>
+            <span className="whitespace-nowrap text-[13px] font-bold tracking-wide">
+              FDEC 2026<span className="hidden sm:inline"> · 圆桌选座</span>
+            </span>
           </button>
           <div className="flex items-center gap-1.5">
             <div className="flex rounded-lg border border-line p-0.5">
               <button
                 onClick={() => setTab('map')}
-                className={`flex items-center gap-1 rounded-md px-2.5 py-1.5 text-[12px] ${tab === 'map' ? 'bg-white/12 text-white' : 'text-fog'}`}
+                className={`flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-1.5 text-[12px] ${tab === 'map' ? 'bg-white/12 text-white' : 'text-fog'}`}
               >
                 <Map className="size-3.5" />
                 平面图
               </button>
               <button
                 onClick={() => setTab('list')}
-                className={`flex items-center gap-1 rounded-md px-2.5 py-1.5 text-[12px] ${tab === 'list' ? 'bg-white/12 text-white' : 'text-fog'}`}
+                className={`flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-1.5 text-[12px] ${tab === 'list' ? 'bg-white/12 text-white' : 'text-fog'}`}
               >
                 <LayoutGrid className="size-3.5" />
                 列表
