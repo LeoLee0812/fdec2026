@@ -31,8 +31,8 @@ export function TopicList({ topics, myTopicId, onOpen }: Props) {
           <button
             key={t.id}
             onClick={() => onOpen(t)}
-            className="tp-card group relative overflow-hidden rounded-2xl border border-line bg-panel/70 p-4 text-left transition hover:border-fg/25 hover:bg-panel"
-            style={mine ? { borderColor: a.main, boxShadow: `0 0 26px ${a.soft}` } : undefined}
+            className="tp-card group relative overflow-hidden border border-line bg-panel/70 p-4 text-left transition hover:border-fg/30 hover:bg-panel"
+            style={mine ? { borderColor: 'var(--alert)' } : undefined}
           >
             <div className="flex items-start justify-between gap-3">
               <span className="font-mono text-[26px] font-black leading-none" style={{ color: a.main }}>
@@ -40,8 +40,8 @@ export function TopicList({ topics, myTopicId, onOpen }: Props) {
               </span>
               {mine ? (
                 <span
-                  className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold"
-                  style={{ background: a.soft, color: a.main }}
+                  className="flex items-center gap-1 px-2 py-0.5 text-[11px] font-bold"
+                  style={{ background: 'var(--alert)', color: '#fff' }}
                 >
                   <Check className="size-3" />
                   我的桌
@@ -57,7 +57,7 @@ export function TopicList({ topics, myTopicId, onOpen }: Props) {
 
             <div className="mt-3 flex items-center gap-2 text-[12px] text-fog">
               <Users className="size-3.5" />
-              {t.capacity} 人圆桌 · 已坐 {t.taken.length} 人
+              {t.capacity} 人方桌 · 已坐 {t.taken.length} 人
             </div>
 
             <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-fg/10">

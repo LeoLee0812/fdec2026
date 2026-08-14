@@ -127,13 +127,13 @@ export default function App() {
   const myTopic = state.mySeat ? state.topics.find((t) => t.id === state.mySeat!.topic_id) : undefined
 
   return (
-    <div className="bg-aurora bg-grid relative min-h-dvh">
+    <div className="bg-aurora relative min-h-dvh">
       <header className="sticky top-0 z-30 border-b border-line bg-ink/85 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <button onClick={() => setView('cover')} className="flex items-center gap-2.5">
             <img src="/openfde-mark.png" alt="OpenFDE" className="size-6 invert dark:invert-0" />
             <span className="whitespace-nowrap text-[13px] font-bold tracking-wide">
-              FDEC 2026<span className="hidden sm:inline"> · 圆桌选座</span>
+              FDEC 2026<span className="hidden sm:inline"> · 会场选座</span>
             </span>
           </button>
           <div className="flex items-center gap-1.5">
@@ -163,18 +163,18 @@ export default function App() {
 
       <main className="mx-auto max-w-5xl px-4 pb-32 pt-4">
         {state.notice && (
-          <div className="mb-4 rounded-xl border border-amber/40 bg-amber/10 px-4 py-3 text-[13px] text-amber">
+          <div className="mb-4 border-l-2 border-[var(--alert)] bg-panel px-4 py-3 text-[13px] text-fg">
             {state.notice}
           </div>
         )}
         {!state.open && (
-          <div className="mb-4 rounded-xl border border-line bg-panel px-4 py-3 text-[13px] text-fog">
+          <div className="mb-4 border border-line bg-panel px-4 py-3 text-[13px] text-fog">
             选座已锁定，如需调整请联系现场工作人员。
           </div>
         )}
 
         {tab === 'map' ? (
-          <div className="rounded-2xl border border-line bg-panel/40 p-2 sm:p-4">
+          <div className="border border-line bg-panel/40 p-2 sm:p-4">
             <VenueMap topics={state.topics} myTopicId={myTopic?.id} onOpen={(t) => setOpenId(t.id)} />
           </div>
         ) : (
@@ -226,7 +226,7 @@ export default function App() {
       )}
 
       <Dialog open={!!pending} onOpenChange={(o) => !o && setPending(null)}>
-        <DialogContent className="max-w-[19.5rem] rounded-2xl border-line bg-panel sm:max-w-sm">
+        <DialogContent className="max-w-[19.5rem] rounded-none border-line bg-panel sm:max-w-sm">
           <DialogHeader>
             <DialogTitle>{pending?.kind === 'cancel' ? '取消当前座位？' : '确认坐这个位置？'}</DialogTitle>
             <DialogDescription className="text-fog">
@@ -244,7 +244,7 @@ export default function App() {
             <Button variant="outline" onClick={() => setPending(null)} className="border-line bg-transparent">
               再想想
             </Button>
-            <Button onClick={commit} className="bg-gradient-to-r from-cyan to-violet font-bold text-white">
+            <Button onClick={commit} className="bg-fg font-bold text-ink hover:opacity-90">
               确认
             </Button>
           </DialogFooter>

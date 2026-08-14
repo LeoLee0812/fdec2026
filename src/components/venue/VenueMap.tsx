@@ -9,112 +9,118 @@ type Props = {
   onOpen: (topic: Topic) => void
 }
 
-/**
- * 全场平面图：桌子用一张俯视素材图重复摆放（比 SVG 画的干净好看），
- * 桌号、余位、我的桌高亮这些状态再叠在图上。舞台在上、签到处在下，与现场摆位一致。
- */
+/** 平面图里的一张迷你口字桌：4 张长条桌拼成方框，外圈 10 把椅子 */
+function MiniTable({ topic, mine }: { topic: Topic; mine: boolean }) {
+  const a = ACCENT[topic.accent]
+  const taken = new Set(topic.taken.map((s) => s.seat_no))
+  const full = topic.taken.length >= topic.capacity
+  // 与详情页同一套摆法：上下短边各 2 人，左右长边各 3 人
+  const chairs = [
+    { x: -13, y: -37, w: 18, h: 11 },
+    { x: 13, y: -37, w: 18, h: 11 },
+    { x: 37, y: -18, w: 11, h: 16 },
+    { x: 37, y: 0, w: 11, h: 16 },
+    { x: 37, y: 18, w: 11, h: 16 },
+    { x: 13, y: 37, w: 18, h: 11 },
+    { x: -13, y: 37, w: 18, h: 11 },
+    { x: -37, y: 18, w: 11, h: 16 },
+    { x: -37, y: 0, w: 11, h: 16 },
+    { x: -37, y: -18, w: 11, h: 16 },
+  ]
+
+  return (
+    <svg viewBox="-50 -50 100 100" className="w-full">
+      {chairs.map((c, i) => (
+        <rect
+          key={i}
+          x={c.x - c.w / 2}
+          y={c.y - c.h / 2}
+          width={c.w}
+          height={c.h}
+          rx="2.5"
+          fill={taken.has(i) ? a.main : 'var(--chair)'}
+          fillOpacity={taken.has(i) ? 1 : 0.5}
+        />
+      ))}
+      <path
+        d="M-28,-28 H28 V28 H-28 Z M-14,-14 H14 V14 H-14 Z"
+        fillRule="evenodd"
+        fill="var(--paper)"
+        fillOpacity={full ? 0.4 : 1}
+        stroke={mine ? 'var(--alert)' : 'var(--paper-line)'}
+        strokeWidth={mine ? 2 : 1}
+      />
+      <text
+        textAnchor="middle"
+        y="5"
+        fontSize="17"
+        fontWeight="800"
+        fill={full ? 'var(--color-fog)' : mine ? 'var(--alert)' : 'var(--color-fg)'}
+      >
+        {String(topic.table_no).padStart(2, '0')}
+      </text>
+    </svg>
+  )
+}
+
+/** 全场平面图：20 张桌按现场摆位 4 列 × 5 行，舞台在上、签到处在下 */
 export function VenueMap({ topics, myTopicId, onOpen }: Props) {
   const root = useRef<HTMLDivElement>(null)
 
   useGSAP(
     () => {
       const reduce = prefersReducedMotion()
-      if (reduce) {
-        gsap.fromTo('.vm-table', { opacity: 0 }, { opacity: 1, duration: 0.3, stagger: 0.01 })
-        return
-      }
-      gsap.fromTo('.vm-stage', { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' })
-      // 从场地中心往外一圈圈亮起来
+      gsap.fromTo('.vm-stage', { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' })
       gsap.fromTo(
         '.vm-table',
-        { opacity: 0, scale: 0.72 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.6,
-          ease: 'back.out(1.6)',
-          stagger: { each: 0.04, from: 'center', grid: 'auto' },
-        },
+        { opacity: 0, y: reduce ? 0 : 10 },
+        { opacity: 1, y: 0, duration: reduce ? 0.2 : 0.4, ease: 'power2.out', stagger: { each: 0.025 } },
       )
-      gsap.fromTo('.vm-foot', { opacity: 0 }, { opacity: 1, duration: 0.5, delay: 0.6 })
     },
     { scope: root, dependencies: [topics.length, myTopicId], revertOnUpdate: true },
   )
 
   return (
-    <div ref={root} className="mx-auto max-w-4xl px-1 py-2">
+    <div ref={root} className="mx-auto max-w-4xl px-1 py-1">
       {/* 舞台 */}
-      <div className="vm-stage mx-auto mb-5 max-w-lg rounded-2xl border border-cyan/35 bg-gradient-to-b from-cyan/12 to-transparent px-4 py-3 text-center sm:mb-8 sm:px-6 sm:py-4">
-        <p className="text-[15px] font-black tracking-[0.28em] text-cyan text-glow sm:text-[17px]">舞台 / 主讲区</p>
-        <p className="mt-1 text-[10.5px] tracking-widest text-fog sm:text-[11.5px]">FDEC 2026 · 湖畔良仓 21 号楼</p>
+      <div className="vm-stage mx-auto mb-6 max-w-lg border border-line bg-panel px-5 py-3 text-center sm:mb-8">
+        <p className="text-[15px] font-black tracking-[0.34em] sm:text-[17px]">舞台 / 主讲区</p>
+        <p className="mt-1 text-[10.5px] tracking-[0.2em] text-fog sm:text-[11.5px]">湖畔良仓 21 号楼 · 8 月 22 日</p>
       </div>
 
-      {/* 20 张桌子 */}
-      {/* 固定 4 列 × 5 行，和现场摆位一一对应，手机上也不改列数（改了就不是「平面图」了） */}
-      <div className="grid grid-cols-4 gap-x-1.5 gap-y-3 sm:gap-x-5 sm:gap-y-6">
+      {/* 固定 4 列 × 5 行，与现场摆位一一对应，手机上也不改列数 */}
+      <div className="grid grid-cols-4 gap-x-2 gap-y-4 sm:gap-x-5 sm:gap-y-6">
         {topics.map((t) => {
-          const a = ACCENT[t.accent]
           const left = t.capacity - t.taken.length
           const full = left <= 0
           const mine = t.id === myTopicId
-
           return (
             <button
               key={t.id}
               onClick={() => onOpen(t)}
               title={t.title}
-              className="vm-table group relative flex flex-col items-center outline-none"
+              className="vm-table group flex flex-col items-center outline-none"
             >
-              <div className="relative w-full">
-                {mine && (
-                  <div
-                    className="pointer-events-none absolute inset-[6%] animate-pulse rounded-full blur-xl"
-                    style={{ background: a.main, opacity: 0.28 }}
-                  />
-                )}
-                <img
-                  src="/table-top.png"
-                  alt=""
-                  loading="lazy"
-                  draggable={false}
-                  className="relative w-full select-none transition duration-300 group-hover:scale-[1.04] [mask-image:radial-gradient(circle_at_50%_50%,#000_60%,transparent_74%)]"
-                  style={{
-                    filter: full
-                      ? 'grayscale(1) brightness(0.55)'
-                      : `hue-rotate(${HUE[t.accent]}deg) saturate(1.05)`,
-                    opacity: full ? 0.6 : 1,
-                  }}
-                />
-                {/* 桌号叠在桌面中央 */}
-                <div className="pointer-events-none absolute inset-0 grid place-items-center">
-                  <span
-                    className="grid size-[38%] place-items-center rounded-full font-mono text-[clamp(15px,4.6vw,28px)] font-black leading-none backdrop-blur-[2px]"
-                    style={{
-                      color: full ? '#8b93a7' : '#fff',
-                      background: 'rgba(5,6,10,.55)',
-                      boxShadow: `0 0 20px ${full ? 'transparent' : a.soft}`,
-                    }}
-                  >
-                    {String(t.table_no).padStart(2, '0')}
-                  </span>
-                </div>
+              <div className="w-full transition-transform duration-200 group-hover:-translate-y-0.5">
+                <MiniTable topic={t} mine={mine} />
               </div>
-
-              {/* 状态徽章 */}
               <span
-                className="-mt-1.5 flex items-center gap-0.5 whitespace-nowrap rounded-full border px-1.5 py-0.5 text-[9.5px] font-bold sm:-mt-2 sm:gap-1 sm:px-2.5 sm:py-1 sm:text-[11.5px]"
-                style={{
-                  borderColor: mine ? a.main : full ? 'var(--color-line)' : 'var(--color-line)',
-                  color: mine ? a.main : full ? 'var(--color-fog)' : 'var(--color-fg)',
-                  background: mine ? a.soft : 'var(--color-panel)',
-                }}
+                className={`mt-0.5 whitespace-nowrap text-[10px] font-bold sm:text-[11.5px] ${
+                  mine ? 'text-[var(--alert)]' : full ? 'text-fog' : 'text-fg/70'
+                }`}
               >
-                {mine && <Check className="size-2.5 sm:size-3" />}
-                {mine ? '我的桌' : full ? '坐满' : `余 ${left}`}
+                {mine ? (
+                  <span className="inline-flex items-center gap-0.5">
+                    <Check className="size-2.5" />
+                    我的桌
+                  </span>
+                ) : full ? (
+                  '坐满'
+                ) : (
+                  `余 ${left}`
+                )}
               </span>
-
-              {/* 手机上不显示话题名，靠桌号认位；想看话题去「列表」页 */}
-              <p className="mt-2 hidden line-clamp-2 px-1 text-center text-[12px] leading-snug text-fog transition group-hover:text-fg/90 sm:block">
+              <p className="mt-1 hidden line-clamp-2 px-1 text-center text-[12px] leading-snug text-fog transition group-hover:text-fg/90 sm:block">
                 {t.title}
               </p>
             </button>
@@ -122,12 +128,9 @@ export function VenueMap({ topics, myTopicId, onOpen }: Props) {
         })}
       </div>
 
-      <div className="vm-foot mx-auto mt-8 max-w-xs rounded-xl border border-line bg-panel/70 py-2.5 text-center text-[12px] tracking-widest text-fog">
+      <div className="mx-auto mt-7 max-w-xs border border-line bg-panel py-2 text-center text-[11.5px] tracking-[0.2em] text-fog">
         入口 / 签到处
       </div>
     </div>
   )
 }
-
-/** 素材本身是青色的，用色相旋转把每张桌子拉开区分度 */
-const HUE: Record<string, number> = { cyan: 0, violet: 42, magenta: 86, amber: 155 }

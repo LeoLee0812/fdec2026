@@ -72,14 +72,14 @@ export function Login({ onBack, onLoggedIn, siteKey }: Props) {
   }
 
   return (
-    <div ref={root} className="bg-aurora bg-grid relative min-h-dvh px-5 pb-[calc(30px+env(safe-area-inset-bottom))] pt-5">
+    <div ref={root} className="bg-aurora relative min-h-dvh px-5 pb-[calc(30px+env(safe-area-inset-bottom))] pt-5">
       <button onClick={onBack} className="flex items-center gap-1 py-2 text-sm text-fog hover:text-fg">
         <ChevronLeft className="size-4" />
         返回
       </button>
 
       <div className="mx-auto max-w-md">
-        <div className="lg-card mt-[8vh] rounded-3xl border border-line bg-panel/90 p-6 shadow-2xl backdrop-blur">
+        <div className="lg-card mt-[8vh] border border-line bg-panel/90 p-6">
           <span className="font-mono text-[11px] font-bold tracking-[.16em] text-cyan">STEP 01 / 身份确认</span>
           <h2 className="mt-2 text-[26px] font-black leading-tight">确认一下你是谁</h2>
           <p className="mt-2 text-[13px] text-fog">
@@ -96,7 +96,7 @@ export function Login({ onBack, onLoggedIn, siteKey }: Props) {
                 autoComplete="name"
                 placeholder="请输入姓名"
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="h-12 bg-ink-2 text-base"
+                className="h-12 rounded-none bg-ink-2 text-base"
               />
             </div>
             <div className="lg-field space-y-2">
@@ -109,7 +109,7 @@ export function Login({ onBack, onLoggedIn, siteKey }: Props) {
                 autoComplete="tel"
                 placeholder="请输入手机号"
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="h-12 bg-ink-2 text-base"
+                className="h-12 rounded-none bg-ink-2 text-base"
               />
             </div>
             <div className="lg-field space-y-2">
@@ -121,7 +121,7 @@ export function Login({ onBack, onLoggedIn, siteKey }: Props) {
                 autoCapitalize="characters"
                 placeholder="临时来宾请填写邀请码"
                 onChange={(e) => setForm({ ...form, invite_code: e.target.value.toUpperCase() })}
-                className="h-12 bg-ink-2 font-mono text-base tracking-widest"
+                className="h-12 rounded-none bg-ink-2 font-mono text-base tracking-widest"
               />
             </div>
 
@@ -140,7 +140,7 @@ export function Login({ onBack, onLoggedIn, siteKey }: Props) {
             <Button
               onClick={submit}
               disabled={busy}
-              className="lg-field h-12 w-full rounded-xl bg-gradient-to-r from-cyan to-violet text-base font-bold text-white hover:opacity-90"
+              className="lg-field h-12 w-full rounded-none bg-fg text-base font-bold text-ink hover:opacity-90"
             >
               {busy ? <Loader2 className="size-4 animate-spin" /> : '进入选座'}
             </Button>

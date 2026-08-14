@@ -62,54 +62,62 @@
    切换时 GSAP 会把这些变量以内联样式补间到目标值，动画结束再清掉内联值、交回 class 接管 */
 .dark {
   color-scheme: dark;
-  --color-ink: #05060a;
-  --color-ink-2: #0b0d14;
-  --color-panel: #11141d;
-  --color-line: #232838;
-  --color-fog: #8b93a7;
-  --color-fg: #e8ecf5;
-  --hairline: rgba(255, 255, 255, 0.12);
-  --grid-line: rgba(255, 255, 255, 0.045);
-  --veil: rgba(5, 6, 10, 0.75);
-  /* 强调色：暗色用霓虹原色 */
-  --ac-cyan: #38e1ff;
-  --ac-cyan-soft: rgba(56, 225, 255, 0.16);
-  --ac-cyan-deep: #0d4c60;
-  --ac-violet: #8b5cff;
-  --ac-violet-soft: rgba(139, 92, 255, 0.16);
-  --ac-violet-deep: #3a2377;
-  --ac-magenta: #ff4fd8;
-  --ac-magenta-soft: rgba(255, 79, 216, 0.16);
-  --ac-magenta-deep: #6d1a5c;
-  --ac-amber: #ffb638;
-  --ac-amber-soft: rgba(255, 182, 56, 0.16);
-  --ac-amber-deep: #6b4409;
+  --color-ink: #000000;
+  --color-ink-2: #0b0b0d;
+  --color-panel: #121215;
+  --color-line: #26262c;
+  --color-fog: #8a8a93;
+  --color-fg: #f2f2f3;
+  --hairline: rgba(255, 255, 255, 0.1);
+  --grid-line: rgba(255, 255, 255, 0.035);
+  --veil: rgba(0, 0, 0, 0.78);
+  /* 会场平面图用的“图纸”配色：米色桌面 + 深灰椅子 */
+  --paper: #d6c6a4;
+  --paper-line: #7d6f55;
+  --chair: #3c414c;
+  --alert: #ff2d46;
+  /* 分组色：低饱和印刷感，不用霓虹 */
+  --ac-cyan: #4a86ff;
+  --ac-cyan-soft: rgba(74, 134, 255, 0.14);
+  --ac-cyan-deep: #1b2c4d;
+  --ac-violet: #8b8fc4;
+  --ac-violet-soft: rgba(139, 143, 196, 0.14);
+  --ac-violet-deep: #2c2e44;
+  --ac-magenta: #d4685c;
+  --ac-magenta-soft: rgba(212, 104, 92, 0.14);
+  --ac-magenta-deep: #43231f;
+  --ac-amber: #c19a5b;
+  --ac-amber-soft: rgba(193, 154, 91, 0.14);
+  --ac-amber-deep: #3a2e1a;
 }
 
 html:not(.dark) {
   color-scheme: light;
-  --color-ink: #eef1f6;
+  --color-ink: #f1efea;
   --color-ink-2: #ffffff;
   --color-panel: #ffffff;
-  --color-line: #dde2ec;
-  --color-fog: #66708a;
-  --color-fg: #10131b;
-  --hairline: rgba(16, 19, 27, 0.12);
-  --grid-line: rgba(16, 19, 27, 0.05);
-  --veil: rgba(255, 255, 255, 0.78);
-  /* 强调色：亮色下必须压暗一档，霓虹原色在白底上根本看不清 */
-  --ac-cyan: #0a8fb8;
-  --ac-cyan-soft: rgba(10, 143, 184, 0.12);
-  --ac-cyan-deep: #cbeaf5;
-  --ac-violet: #6a3ce0;
-  --ac-violet-soft: rgba(106, 60, 224, 0.12);
-  --ac-violet-deep: #ded3ff;
-  --ac-magenta: #cf159c;
-  --ac-magenta-soft: rgba(207, 21, 156, 0.12);
-  --ac-magenta-deep: #ffd6f4;
-  --ac-amber: #a56a00;
-  --ac-amber-soft: rgba(165, 106, 0, 0.13);
-  --ac-amber-deep: #ffe6bd;
+  --color-line: #d9d5cc;
+  --color-fog: #6b6a66;
+  --color-fg: #14140f;
+  --hairline: rgba(20, 20, 15, 0.12);
+  --grid-line: rgba(20, 20, 15, 0.04);
+  --veil: rgba(255, 255, 255, 0.8);
+  --paper: #e0d2b2;
+  --paper-line: #8d7d60;
+  --chair: #4c525f;
+  --alert: #e01029;
+  --ac-cyan: #1f5fd8;
+  --ac-cyan-soft: rgba(31, 95, 216, 0.1);
+  --ac-cyan-deep: #d5e0f7;
+  --ac-violet: #5a5f92;
+  --ac-violet-soft: rgba(90, 95, 146, 0.1);
+  --ac-violet-deep: #dcdcea;
+  --ac-magenta: #b23f33;
+  --ac-magenta-soft: rgba(178, 63, 51, 0.1);
+  --ac-magenta-deep: #f3ddd9;
+  --ac-amber: #8a6621;
+  --ac-amber-soft: rgba(138, 102, 33, 0.1);
+  --ac-amber-deep: #f0e5cf;
 }
 
 * {
@@ -130,21 +138,16 @@ body {
   overscroll-behavior-y: none;
 }
 
-/* 全站底噪：海报里那种网格 + 极光 */
+/* 底色就是纯黑，只在顶部留一道极淡的品牌光，别再糊三团彩雾 */
 .bg-aurora {
   background:
-    radial-gradient(1100px 620px at 82% -6%, rgba(139, 92, 255, 0.24), transparent 62%),
-    radial-gradient(900px 560px at 6% 12%, rgba(56, 225, 255, 0.18), transparent 60%),
-    radial-gradient(760px 520px at 50% 108%, rgba(255, 79, 216, 0.16), transparent 62%),
+    linear-gradient(180deg, rgba(74, 134, 255, 0.07) 0%, transparent 32%),
     var(--color-ink);
 }
 
-/* 亮色下极光要收敛，不然整页发糊 */
 html:not(.dark) .bg-aurora {
   background:
-    radial-gradient(1100px 620px at 82% -6%, rgba(139, 92, 255, 0.13), transparent 62%),
-    radial-gradient(900px 560px at 6% 12%, rgba(56, 225, 255, 0.12), transparent 60%),
-    radial-gradient(760px 520px at 50% 108%, rgba(255, 79, 216, 0.1), transparent 62%),
+    linear-gradient(180deg, rgba(31, 95, 216, 0.06) 0%, transparent 30%),
     var(--color-ink);
 }
 
@@ -180,21 +183,20 @@ html:not(.dark) .bg-aurora {
   background-size: 100% 3px;
 }
 
-.glow-cyan {
-  box-shadow: 0 0 34px rgba(56, 225, 255, 0.18), inset 0 0 0 1px rgba(56, 225, 255, 0.32);
+.rule-alert {
+  /* 海报里那圈红色细框 */
+  border: 1px solid var(--alert);
 }
 
 .text-glow {
-  text-shadow: 0 0 22px rgba(56, 225, 255, 0.42);
-}
-
-html:not(.dark) .text-glow {
   text-shadow: none;
 }
 
+
+
 /* 渐变标题，取海报里 FDE 三个字母的配色 */
 .grad-fde {
-  background: linear-gradient(96deg, #38e1ff 0%, #8b5cff 46%, #ff4fd8 100%);
+  background: linear-gradient(96deg, #4fc3ff 0%, #a06bff 42%, #ff5f9e 78%, #ff8a3d 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

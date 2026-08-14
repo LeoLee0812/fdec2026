@@ -36,20 +36,20 @@ export function TableDetail({ topic, hasSeatElsewhere, onClose, onPickSeat, onCa
         </button>
 
         {/* 话题卡 */}
-        <section className="dt-card rounded-2xl border border-line bg-panel/80 p-5" style={{ boxShadow: `0 0 40px ${a.soft}` }}>
+        <section className="dt-card border border-line bg-panel/80 p-5">
           <div className="flex items-center justify-between font-mono text-[11px] font-bold tracking-[.14em]" style={{ color: a.main }}>
             <span>TOPIC {String(topic.table_no).padStart(2, '0')}</span>
-            <span className="rounded-full px-2.5 py-1" style={{ background: a.soft }}>
+            <span className="px-2 py-0.5" style={{ background: a.soft }}>
               {topic.table_no} 号桌
             </span>
           </div>
           <h2 className="mt-3 text-[22px] font-black leading-snug">{topic.title}</h2>
-          <p className="mt-3 rounded-xl border border-line bg-ink-2/70 p-3.5 text-[13.5px] leading-relaxed text-fog">
+          <p className="mt-3 border-l-2 border-line bg-ink-2/60 px-3.5 py-3 text-[13.5px] leading-relaxed text-fog">
             {topic.description || '围绕这个主题自由交流，欢迎带着你的经验、问题和好奇心加入。'}
           </p>
           <div className="mt-4 flex items-center justify-between text-[13px]">
             <span className="text-fg/80">
-              {topic.capacity} 人圆桌 · 已坐 <b>{topic.taken.length}</b> 人
+              {topic.capacity} 人方桌 · 已坐 <b>{topic.taken.length}</b> 人
             </span>
             <span style={{ color: left ? a.main : 'var(--ac-magenta)' }} className="font-bold">
               {left ? `还剩 ${left} 个座位` : '本桌已坐满'}
@@ -58,7 +58,7 @@ export function TableDetail({ topic, hasSeatElsewhere, onClose, onPickSeat, onCa
         </section>
 
         {/* 座位图 */}
-        <section className="dt-card mt-4 rounded-2xl border border-line bg-panel/60 px-2 pb-4 pt-5">
+        <section className="dt-card mt-4 border border-line bg-panel/60 px-2 pb-4 pt-5">
           <div className="mb-1 flex items-baseline justify-between px-3">
             <h3 className="text-[17px] font-bold">选择一个位置</h3>
             <span className="text-[12px] text-fog">按现场方位排列</span>

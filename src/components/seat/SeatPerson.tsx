@@ -8,124 +8,103 @@ type Props = {
   y: number
   name?: string
   mine?: boolean
-  isOwner?: boolean
   accent: AccentKey
   onClick?: () => void
 }
 
 /**
- * 单个座位的俯视小人。
- * 局部坐标约定：原点是座位中心，+y 指向桌心，所以整组只要 rotate(角度) 就能自动朝向桌子。
- * 头像里的文字要再 rotate(-角度) 转回来，否则侧面和下方的名字会倒着写。
+ * 一个座位 = 一把俯视的椅子 +（坐了人时）一个头像。
+ * 局部坐标约定：原点是椅子中心，+y 指向桌心，所以整组只要 rotate(角度) 就自动朝向桌子。
+ * 文字要再 rotate(-角度) 转回来，否则侧面和下方的名字是倒着的。
  */
-export function SeatPerson({ seatNo, angle, x, y, name, mine, isOwner, accent, onClick }: Props) {
+export function SeatPerson({ seatNo, angle, x, y, name, mine, accent, onClick }: Props) {
   const a = ACCENT[accent]
   const empty = !name
 
-  // 定位（translate/rotate）放在外层 <g>，动画只作用于没有 transform 的内层，
-  // 否则 GSAP 改写 transform 矩阵时会把定位一起吃掉，小人全跑到画布左上角
-  if (empty) {
-    return (
-      <g transform={`translate(${x} ${y})`}>
-        <g className="seat-node seat-empty cursor-pointer" data-seat={seatNo} onClick={onClick}>
-          <circle
-            r="26"
-            fill="rgba(255,255,255,.02)"
-            stroke={a.main}
-            strokeOpacity="0.5"
-            strokeWidth="1.6"
-            strokeDasharray="5 6"
-          />
-          <circle className="seat-hit" r="30" fill="transparent" />
-          <text textAnchor="middle" y="4" fontSize="13" fill={a.main} fillOpacity="0.85">
-            空位
-          </text>
-        </g>
-      </g>
-    )
-  }
-
-  const av = avatarOf(name!)
-  const gid = `av-${accent}-${seatNo}`
-
+  // 定位放外层 <g>，动画只作用于没有 transform 的内层，
+  // 否则 GSAP 改写 transform 矩阵时会把定位一起吃掉
   return (
     <g transform={`translate(${x} ${y}) rotate(${angle})`}>
-    <g className={`seat-node seat-taken${mine ? ' seat-mine' : ''}`} data-seat={seatNo} onClick={onClick}>
-      <defs>
-        <linearGradient id={gid} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor={av.from} />
-          <stop offset="100%" stopColor={av.to} />
-        </linearGradient>
-      </defs>
-
-      {/* 椅背：在人的身后向外凸 */}
-      <path
-        d="M-27,-4 A 27 27 0 0 1 27,-4"
-        fill="none"
-        stroke={a.main}
-        strokeOpacity={mine ? 0.95 : 0.5}
-        strokeWidth="7"
-        strokeLinecap="round"
-      />
-
-      {/* 身体 */}
-      <ellipse cx="0" cy="6" rx="23" ry="19" fill={a.deep} stroke={a.main} strokeOpacity="0.55" strokeWidth="1.2" />
-
-      {/* 两只手伸向笔记本 */}
-      <path d="M-15,16 Q -13,26 -9,30" fill="none" stroke={a.main} strokeOpacity="0.65" strokeWidth="3" strokeLinecap="round" />
-      <path d="M15,16 Q 13,26 9,30" fill="none" stroke={a.main} strokeOpacity="0.65" strokeWidth="3" strokeLinecap="round" />
-
-      {/* 笔记本：靠桌心那侧，屏幕上跑三行代码 */}
-      <g className="seat-laptop">
-        <rect x="-19" y="28" width="38" height="7" rx="2.5" fill="#20242f" stroke="#333a4c" strokeWidth="0.8" />
-        <rect x="-16" y="35" width="32" height="21" rx="2.5" fill="#0b0e16" stroke={a.main} strokeOpacity="0.45" strokeWidth="1" />
-        <g className="seat-code">
-          <rect className="code-line" x="-13" y="39" width="18" height="2.2" rx="1.1" fill="#58e6a8" />
-          <rect className="code-line" x="-13" y="44" width="24" height="2.2" rx="1.1" fill="#38e1ff" />
-          <rect className="code-line" x="-13" y="49" width="13" height="2.2" rx="1.1" fill="#ff4fd8" />
-        </g>
-      </g>
-
-      {/* 头像 */}
-      <circle r="16" fill={`url(#${gid})`} stroke={mine ? 'var(--color-fg)' : av.ring} strokeOpacity={mine ? 1 : 0.55} strokeWidth={mine ? 2.4 : 1.4} />
-      <g transform={`rotate(${-angle})`}>
-        <text textAnchor="middle" y="5.5" fontSize="15" fontWeight="700" fill="#0b0e16">
-          {av.initial}
-        </text>
-      </g>
-
-      {/* 名字标签：先沿局部 -y 推到桌外（避免压住笔记本），再反旋转保持水平可读 */}
-      <g transform={`translate(0 -44) rotate(${-angle})`}>
-        <text
-          textAnchor="middle"
-          fontSize="13.5"
-          fontWeight="600"
-          fill={mine ? 'var(--color-fg)' : 'var(--color-fg)'}
-          stroke="var(--color-ink)"
-          strokeWidth="3.5"
-          paintOrder="stroke"
-        >
-          {mine ? '我' : name}
-        </text>
-        {isOwner && (
-          <text
-            textAnchor="middle"
-            y="-17"
-            fontSize="10.5"
-            fontWeight="700"
-            fill={a.main}
-            letterSpacing="1"
-            stroke="var(--color-ink)"
-            strokeWidth="3"
-            paintOrder="stroke"
-          >
-            话题发起人
-          </text>
+      <g
+        className={`seat-node ${empty ? 'seat-empty' : 'seat-taken'}${mine ? ' seat-mine' : ''} cursor-pointer`}
+        data-seat={seatNo}
+        onClick={onClick}
+      >
+        {empty ? (
+          <>
+            {/* 空椅子：虚线勾一把 */}
+            <rect x="-21" y="-19" width="42" height="9" rx="3" fill="none" stroke="var(--color-line)" strokeWidth="1.6" />
+            <rect
+              x="-19"
+              y="-9"
+              width="38"
+              height="32"
+              rx="6"
+              fill="none"
+              stroke="var(--color-fog)"
+              strokeOpacity="0.6"
+              strokeWidth="1.4"
+              strokeDasharray="4 5"
+            />
+            <g transform={`rotate(${-angle})`}>
+              <text textAnchor="middle" y="11" fontSize="11" fill="var(--color-fog)">
+                空位
+              </text>
+            </g>
+          </>
+        ) : (
+          <>
+            {/* 椅背 + 椅座 */}
+            <rect x="-21" y="-19" width="42" height="9" rx="3" fill={mine ? a.main : 'var(--chair)'} />
+            <rect
+              x="-19"
+              y="-9"
+              width="38"
+              height="32"
+              rx="6"
+              fill="var(--chair)"
+              stroke={mine ? a.main : 'var(--color-line)'}
+              strokeWidth={mine ? 2 : 1}
+            />
+            {/* 头像 */}
+            <defs>
+              <linearGradient id={`av-${accent}-${seatNo}`} x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor={avatarOf(name!).from} />
+                <stop offset="100%" stopColor={avatarOf(name!).to} />
+              </linearGradient>
+            </defs>
+            <circle cx="0" cy="7" r="14" fill={`url(#av-${accent}-${seatNo})`} />
+            <g transform={`translate(0 7) rotate(${-angle})`}>
+              <text textAnchor="middle" y="5" fontSize="13" fontWeight="700" fill="#101014">
+                {avatarOf(name!).initial}
+              </text>
+            </g>
+            {/* 桌面上的笔记本 */}
+            <rect x="-13" y="31" width="26" height="15" rx="2" fill="var(--color-ink-2)" stroke="var(--paper-line)" strokeWidth="0.8" />
+            <line x1="-9" y1="36" x2="6" y2="36" stroke="var(--color-fog)" strokeWidth="1.2" />
+            <line x1="-9" y1="40" x2="2" y2="40" stroke="var(--color-fog)" strokeWidth="1.2" />
+          </>
         )}
-      </g>
 
-      <circle className="seat-hit" r="30" fill="transparent" />
-    </g>
+        {/* 名字：先沿局部 -y 推到桌外，再反旋转保持水平 */}
+        {!empty && (
+          <g transform={`translate(0 -35) rotate(${-angle})`}>
+            <text
+              textAnchor="middle"
+              fontSize="12.5"
+              fontWeight="600"
+              fill="var(--color-fg)"
+              stroke="var(--color-ink)"
+              strokeWidth="3"
+              paintOrder="stroke"
+            >
+              {mine ? '我' : name}
+            </text>
+          </g>
+        )}
+
+        <rect className="seat-hit" x="-24" y="-24" width="48" height="56" fill="transparent" />
+      </g>
     </g>
   )
 }

@@ -28,8 +28,6 @@ export function Cover({ onStart, entryText, stats }: Props) {
       if (reduce) return
 
       // 光晕缓慢漂移，桌面端再叠一层鼠标视差
-      gsap.to('.cv-glow', { xPercent: 8, yPercent: -6, duration: 9, repeat: -1, yoyo: true, ease: 'sine.inOut' })
-
       const mm = gsap.matchMedia()
       mm.add('(min-width: 900px)', () => {
         const layers = gsap.utils.toArray<HTMLElement>('.cv-parallax')
@@ -55,21 +53,20 @@ export function Cover({ onStart, entryText, stats }: Props) {
   )
 
   return (
-    <div ref={root} className="bg-aurora bg-grid relative min-h-dvh overflow-hidden">
-      <div className="cv-glow pointer-events-none absolute -top-40 right-[-10%] h-[520px] w-[520px] rounded-full bg-violet/25 blur-[120px]" />
+    <div ref={root} className="bg-aurora relative min-h-dvh overflow-hidden">
 
       <div className="relative mx-auto flex min-h-dvh max-w-2xl flex-col px-6 pb-[calc(28px+env(safe-area-inset-bottom))] pt-7">
         <div className="cv-mark flex items-center justify-between">
           <img src="/openfde-wordmark.png" alt="OpenFDE" className="h-7 opacity-95 invert dark:invert-0" />
           <div className="flex items-center gap-2">
-            <span className="rounded-full border border-[var(--hairline)] bg-fg/5 px-3 py-1 font-mono text-[11px] tracking-widest text-fog">
+            <span className="rule-alert px-3 py-1 font-mono text-[11px] tracking-[0.18em] text-[var(--alert)]">
               2026.08.22
             </span>
             <ThemeToggle />
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col justify-center py-12">
+        <div className="flex flex-1 flex-col justify-center py-6">
           <div className="cv-kicker flex items-center gap-2.5 font-mono text-[13px] font-bold tracking-[.18em] text-cyan">
             <i className="h-px w-7 bg-cyan" />
             FDEC 2026
@@ -92,11 +89,11 @@ export function Cover({ onStart, entryText, stats }: Props) {
             </p>
             <p className="flex items-center gap-2.5">
               <Users className="size-4 text-magenta" />
-              20 张圆桌 · 20 个话题 · 200 位工程师
+              20 张会议桌 · 20 个话题 · 200 位工程师
             </p>
           </div>
 
-          <div className="scanlines relative mt-8 overflow-hidden rounded-xl border border-line bg-ink-2/80 px-4 py-3.5 text-[13.5px] text-fg/85">
+          <div className="mt-8 border-l-2 border-[var(--alert)] bg-ink-2/60 px-4 py-3 text-[13.5px] text-fg/85">
             <Typewriter
               lines={[
                 '正在载入会场平面图...',
@@ -109,7 +106,7 @@ export function Cover({ onStart, entryText, stats }: Props) {
 
         <div className="cv-stat grid grid-cols-3 border-y border-[var(--hairline)]">
           {[
-            { v: stats.tables, l: '圆桌话题' },
+            { v: stats.tables, l: '话题桌数' },
             { v: stats.seats, l: '开放座位' },
             { v: stats.left, l: '尚有空位' },
           ].map((s) => (
@@ -122,10 +119,10 @@ export function Cover({ onStart, entryText, stats }: Props) {
 
         <button
           onClick={onStart}
-          className="cv-cta mt-6 flex h-14 w-full items-center justify-between rounded-2xl bg-fg px-5 text-base font-bold text-ink transition hover:opacity-90"
+          className="cv-cta mt-6 flex h-14 w-full items-center justify-between bg-fg px-5 text-base font-bold text-ink transition hover:opacity-90"
         >
           {entryText}
-          <span className="grid size-8 place-items-center rounded-full bg-gradient-to-br from-cyan to-violet text-white">
+          <span className="grid size-8 place-items-center bg-ink text-fg">
             <ArrowRight className="size-4" />
           </span>
         </button>
