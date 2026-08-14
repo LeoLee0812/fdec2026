@@ -242,7 +242,7 @@ app.post('/api/select', auth, async (c) => {
     .bind(topic_id)
     .first<{ id: number; capacity: number }>()
   if (!topic) return c.json({ error: '话题不存在' }, 404)
-  if (!Number.isInteger(seat_no) || seat_no < 1 || seat_no >= topic.capacity) {
+  if (!Number.isInteger(seat_no) || seat_no < 0 || seat_no >= topic.capacity) {
     return c.json({ error: '座位号不合法' }, 400)
   }
 

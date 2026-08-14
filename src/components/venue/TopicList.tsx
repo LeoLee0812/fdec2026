@@ -23,7 +23,7 @@ export function TopicList({ topics, myTopicId, onOpen }: Props) {
     <div ref={root} className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {topics.map((t) => {
         const a = ACCENT[t.accent]
-        const total = t.capacity - 1
+        const total = t.capacity
         const left = total - t.taken.length
         const pct = Math.round((t.taken.length / total) * 100)
         const mine = t.id === myTopicId
@@ -57,7 +57,7 @@ export function TopicList({ topics, myTopicId, onOpen }: Props) {
 
             <div className="mt-3 flex items-center gap-2 text-[12px] text-fog">
               <Users className="size-3.5" />
-              发起人 · {t.owner_name}
+              {t.capacity} 人圆桌 · 已坐 {t.taken.length} 人
             </div>
 
             <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/8">

@@ -184,7 +184,6 @@ export function TableScene({ topic, onPickSeat, onCancelSeat }: Props) {
       {Array.from({ length: topic.capacity }, (_, i) => {
         const pos = seatPos(i, topic.capacity)
         const s = taken.get(i)
-        const isOwner = i === 0
         return (
           <SeatPerson
             key={i}
@@ -193,11 +192,9 @@ export function TableScene({ topic, onPickSeat, onCancelSeat }: Props) {
             x={pos.x}
             y={pos.y}
             accent={topic.accent}
-            isOwner={isOwner}
-            name={isOwner ? topic.owner_name : s?.name}
+            name={s?.name}
             mine={s?.mine}
             onClick={() => {
-              if (isOwner) return
               if (s?.mine) onCancelSeat()
               else if (!s) onPickSeat(i)
             }}

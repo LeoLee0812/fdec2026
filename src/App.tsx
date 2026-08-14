@@ -97,7 +97,7 @@ export default function App() {
     )
   }
 
-  const totalSeats = state ? state.topics.reduce((n, t) => n + t.capacity - 1, 0) : 180
+  const totalSeats = state ? state.topics.reduce((n, t) => n + t.capacity, 0) : 200
   const takenSeats = state ? state.topics.reduce((n, t) => n + t.taken.length, 0) : 0
 
   if (view === 'cover') {

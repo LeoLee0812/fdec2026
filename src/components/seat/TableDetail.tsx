@@ -15,7 +15,7 @@ type Props = {
 export function TableDetail({ topic, hasSeatElsewhere, onClose, onPickSeat, onCancelSeat }: Props) {
   const root = useRef<HTMLDivElement>(null)
   const a = ACCENT[topic.accent]
-  const left = topic.capacity - 1 - topic.taken.length
+  const left = topic.capacity - topic.taken.length
 
   useGSAP(
     () => {
@@ -45,11 +45,11 @@ export function TableDetail({ topic, hasSeatElsewhere, onClose, onPickSeat, onCa
           </div>
           <h2 className="mt-3 text-[22px] font-black leading-snug">{topic.title}</h2>
           <p className="mt-3 rounded-xl border border-line bg-ink-2/70 p-3.5 text-[13.5px] leading-relaxed text-fog">
-            {topic.description || '发起人将围绕这个主题展开交流，欢迎带着你的经验、问题和好奇心加入讨论。'}
+            {topic.description || '围绕这个主题自由交流，欢迎带着你的经验、问题和好奇心加入。'}
           </p>
           <div className="mt-4 flex items-center justify-between text-[13px]">
             <span className="text-white/80">
-              话题发起人 · <b>{topic.owner_name}</b>
+              {topic.capacity} 人圆桌 · 已坐 <b>{topic.taken.length}</b> 人
             </span>
             <span style={{ color: left ? a.main : '#ff4fd8' }} className="font-bold">
               {left ? `还剩 ${left} 个座位` : '本桌已坐满'}
