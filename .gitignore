@@ -29,3 +29,7 @@ dist-ssr
 dist/
 db/attendees.sql
 db/invites.sql
+
+# Vercel
+.vercel
+.env.local
