@@ -23,9 +23,21 @@ FDEC 2026 前沿部署工程师大会（2026-08-22 · 杭州湖畔良仓）的**
 | --- | --- |
 | 前端 | React 19 + TypeScript + Vite + Tailwind v4 + shadcn/ui + lucide |
 | 动效 | GSAP 3.15（TextPlugin / DrawSVG / Flip / CustomBounce / Physics2D） |
-| 后端 | Cloudflare Workers + Hono |
-| 数据 | Cloudflare D1（`fdec2026`） |
-| 部署 | GitHub Actions → Workers（静态资源与 API 同一个 Worker） |
+| 后端 | Hono（业务逻辑在 `shared/routes.ts`，与运行平台解耦） |
+| 数据 | Cloudflare D1（`fdec2026`）/ Neon Postgres，由适配器抹平 |
+| 部署 | Cloudflare Workers（GitHub Actions）+ Vercel（Git 自动部署），两套并行 |
+
+### 一份逻辑两处跑
+
+```
+shared/routes.ts   业务路由（只依赖 shared/db.ts 的 Db 接口）
+  ├── worker/index.ts        D1 适配器  → Cloudflare Workers
+  └── api/[[...route]].ts    Neon 适配器 → Vercel Functions
+```
+
+约定：SQL 一律写 `?` 占位符（Postgres 适配器负责转 `$1`）；要自增主键就用
+`INSERT ... RETURNING id`（两种数据库都支持）；可能撞关键字的标识符
+（`audit_log."at"`、`config."key"`）一律加双引号。
 
 ## 登录与防爬
 
@@ -71,6 +83,8 @@ node scripts/gen-invites.mjs 1 --universal --quota=20 --hours=6  # 1 个限量�
 
 ## 部署
 
+### Cloudflare Workers（hangzhou0822.openfde.online）
+
 push 到 `main` 由 GitHub Actions 自动部署。首次需要：
 
 ```bash
@@ -79,6 +93,28 @@ npx wrangler secret put PHONE_SALT
 npx wrangler d1 execute fdec2026 --remote --file=db/schema.sql
 npx wrangler d1 execute fdec2026 --remote --file=db/seed.sql
 ```
+
+### Vercel（hangzhou0822.openfde.net）
+
+Vercel 项目连上本仓库后 push 即自动部署。首次需要：
+
+1. 在团队里开一个 Neon Postgres（Vercel → Storage / Marketplace），连到本项目，
+   会自动注入 `DATABASE_URL`
+2. 建表灌种子：
+
+   ```bash
+   vercel env pull .env.local          # 拿到 DATABASE_URL
+   set -a && . ./.env.local && set +a
+   pnpm db:init:pg                     # = schema.pg.sql + seed.sql
+   ```
+
+3. 配环境变量（Production + Preview）：`AUTH_SECRET`、`PHONE_SALT`、`EVENT_NAME`，
+   可选 `TURNSTILE_SECRET` / `TURNSTILE_SITEKEY`
+4. 加自定义域 `hangzhou0822.openfde.net`，按 Vercel 给的值去域名 DNS 后台加 CNAME
+
+> 两边的数据库是各自独立的：同一个人在 online 和 net 上会各占一个座位，
+> 正式对外只宣传一个入口。名单导入 Postgres 时给脚本加 `--pg`：
+> `PHONE_SALT=... node scripts/import-attendees.mjs 报名表.csv --pg > db/attendees.pg.sql`
 
 ## 踩过的坑
 

@@ -60,9 +60,11 @@ for (const r of rows) {
   )
 }
 
+// SQLite(D1) 用 INSERT OR IGNORE，Postgres(Neon) 用 ON CONFLICT DO NOTHING
+const pg = process.argv.includes('--pg')
 console.log('-- 由 scripts/import-attendees.mjs 生成，手机号已做 HMAC 摘要')
 console.log(
-  'INSERT OR IGNORE INTO attendees (name, phone_hash, phone_tail, company, job_title, source, created_at) VALUES',
+  `INSERT ${pg ? '' : 'OR IGNORE '}INTO attendees (name, phone_hash, phone_tail, company, job_title, source, created_at) VALUES`,
 )
-console.log(values.join(',\n') + ';')
+console.log(values.join(',\n') + (pg ? '\nON CONFLICT (phone_hash) DO NOTHING;' : ';'))
 console.error(`已生成 ${values.length} 条参会者记录`)
