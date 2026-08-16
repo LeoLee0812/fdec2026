@@ -102,8 +102,8 @@ npx wrangler d1 execute fdec2026 --remote --file=db/seed.sql
 `*.openfde.net` 一条泛 CNAME 指向 `cname.vercel-dns.com`（走的是已备案域名），
 所以新子域不用再动 DNS。首次需要：
 
-1. 在团队里开一个 Neon Postgres（Vercel → Storage / Marketplace），连到本项目，
-   会自动注入 `DATABASE_URL`
+1. 团队里已开好 Neon Postgres（资源名 `neon-teal-house`），已连到本项目，
+   自动注入 `DATABASE_URL`
 2. 建表灌种子：
 
    ```bash
