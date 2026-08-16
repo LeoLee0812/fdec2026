@@ -7,8 +7,8 @@
  *
  * 静态资源由 wrangler.jsonc 的 assets 配置直接处理，只有 /api/* 会进到这里。
  */
-import type { Cfg, Db, Row, Stmt } from '../shared/db'
-import { createApp } from '../shared/routes'
+import type { Cfg, Db, Row, Stmt } from '../shared/db.js'
+import { createApp } from '../shared/routes.js'
 
 type Bindings = {
   DB: D1Database

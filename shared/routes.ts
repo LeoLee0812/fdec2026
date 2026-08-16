@@ -8,7 +8,7 @@
 import { Hono } from 'hono'
 import type { Context } from 'hono'
 import { getCookie, setCookie, deleteCookie } from 'hono/cookie'
-import type { Cfg, Db } from './db'
+import type { Cfg, Db } from './db.js'
 
 type Vars = { me: Attendee; db: Db; cfg: Cfg }
 

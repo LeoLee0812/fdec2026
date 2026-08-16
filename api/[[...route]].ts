@@ -9,8 +9,8 @@
  */
 import { neon } from '@neondatabase/serverless'
 import { handle } from 'hono/vercel'
-import type { Cfg, Db, Row, Stmt } from '../shared/db'
-import { createApp } from '../shared/routes'
+import type { Cfg, Db, Row, Stmt } from '../shared/db.js'
+import { createApp } from '../shared/routes.js'
 
 export const config = { runtime: 'nodejs' }
 
