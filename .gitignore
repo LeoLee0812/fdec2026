@@ -33,3 +33,4 @@ db/invites.sql
 # Vercel
 .vercel
 .env.local
+.env*

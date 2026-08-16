@@ -8,7 +8,8 @@
 FDEC 2026 前沿部署工程师大会（2026-08-22 · 杭州湖畔良仓）的**圆桌话题分组与选座系统**。
 20 张圆桌 × 10 人 = 200 座，参会者用报名时的姓名 + 手机号登录，在会场平面图上挑一张桌、挑一个位置。
 
-线上地址：<https://hangzhou0822.openfde.online>
+线上地址：<https://hangzhou0822.openfde.net>（Vercel，主入口）
+备用地址：<https://hangzhou0822.openfde.online>（Cloudflare Workers）
 
 ## 它长什么样
 
@@ -94,9 +95,12 @@ npx wrangler d1 execute fdec2026 --remote --file=db/schema.sql
 npx wrangler d1 execute fdec2026 --remote --file=db/seed.sql
 ```
 
-### Vercel（hangzhou0822.openfde.net）
+### Vercel（hangzhou0822.openfde.net · 主入口）
 
-Vercel 项目连上本仓库后 push 即自动部署。首次需要：
+项目在 **OpenFDE 团队**下，名为 `fdec2026`，
+已连上本仓库，push 到 `main` 即自动部署。域名 `openfde.net` 的 DNS 在火山引擎，
+`*.openfde.net` 一条泛 CNAME 指向 `cname.vercel-dns.com`（走的是已备案域名），
+所以新子域不用再动 DNS。首次需要：
 
 1. 在团队里开一个 Neon Postgres（Vercel → Storage / Marketplace），连到本项目，
    会自动注入 `DATABASE_URL`
