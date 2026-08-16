@@ -61,4 +61,9 @@ const app = createApp(() => ({
   } satisfies Cfg,
 }))
 
-export default handle(app)
+/**
+ * Vercel 的 Node runtime 默认按 `(req, res)` 签名调用默认导出，返回的 Response 会被忽略
+ * （表现为请求一直挂着直到超时）。改成具名 HTTP 方法导出，才走 Web fetch 风格。
+ */
+const handler = handle(app)
+export { handler as GET, handler as POST, handler as OPTIONS }
