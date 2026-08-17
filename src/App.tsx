@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { track } from '@vercel/analytics'
+import { track } from '@/lib/analytics'
 import { api, ApiError, type Topic, type VenueState } from '@/lib/api'
 import { confettiBurst } from '@/lib/confetti'
 import { Cover } from '@/components/Cover'

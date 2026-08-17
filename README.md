@@ -120,8 +120,23 @@ npx wrangler d1 execute fdec2026 --remote --file=db/seed.sql
 > 正式对外只宣传一个入口。名单导入 Postgres 时给脚本加 `--pg`：
 > `PHONE_SALT=... node scripts/import-attendees.mjs 报名表.csv --pg > db/attendees.pg.sql`
 
+### 访问统计（Vercel Web Analytics）
+
+`src/lib/analytics.ts` 里按域名开关：只有 `*.openfde.net` 才挂 `<Analytics />` 和上报
+`track()`。CF 那边没有 `/_vercel/insights/*`，SPA 回退会把 `index.html` 当脚本返回，
+控制台必报 MIME 错误。
+
+自定义事件：`cover_start`、`login_success`、`seat_select`（带桌号 / 话题 / 座位号）、
+`seat_cancel`、`seat_error`。单页应用只有一条 `/` 的 pageview，转化率得靠这些事件算。
+自定义事件需要 Pro 计划，OpenFDE 团队是 Pro，可用。
+
 ## 踩过的坑
 
+- **CF 的 GitHub Actions 红了但 Worker 其实已更新**：日志尾部报
+  `/zones/<id>/workers/routes` 的 `Authentication error [code: 10000]`，是仓库 Secret 里的
+  `CLOUDFLARE_API_TOKEN` 缺 **Zone → Workers Routes → Edit**（且 Zone 资源要包含
+  `openfde.online`）。此时 `Uploaded fdec2026` 已经成功，代码是新的，只是最后同步自定义域
+  路由那步失败把整个 job 判成红。补权限即可
 - **GSAP 的 `from` 在 React 里会把元素留在初始态**（`opacity:0` 再也不动），全项目一律用 `fromTo` 把终点写死；同时不要套 `StrictMode`，双挂载会让动画卡住
 - **SVG 元素上不能对带 `transform` 属性的 `<g>` 做 scale 动画**：GSAP 会重写整个矩阵，把定位一起吃掉，小人全飞到画布左上角。正确做法是「外层 `<g>` 负责 translate/rotate，内层 `<g>` 只做动画」
 - **`clearProps: 'transform'` 会连原生 transform 属性一起清掉**，只能用在本来就没有 transform 的元素上
