@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
+import { track } from '@vercel/analytics'
 import { api, ApiError, type Topic, type VenueState } from '@/lib/api'
 import { confettiBurst } from '@/lib/confetti'
 import { Cover } from '@/components/Cover'
@@ -69,13 +70,16 @@ export default function App() {
     try {
       if (p.kind === 'cancel') {
         setState(await api.unselect())
+        track('seat_cancel')
         toast('已取消座位')
       } else {
         setState(await api.select(p.topic.id, p.seatNo))
+        track('seat_select', { table: p.topic.table_no, topic: p.topic.title, seat: p.seatNo })
         confettiBurst()
         toast.success(`入座成功 · ${p.topic.table_no} 号桌`, { description: p.topic.title })
       }
     } catch (e) {
+      track('seat_error', { kind: p.kind, message: e instanceof ApiError ? e.message : '未知错误' })
       toast.error(e instanceof ApiError ? e.message : '操作失败')
       refresh()
     } finally {
@@ -106,7 +110,10 @@ export default function App() {
       <Cover
         stats={{ tables: state?.topics.length ?? 20, seats: totalSeats, left: totalSeats - takenSeats }}
         entryText={!state ? '开始选择话题与座位' : state.mySeat ? '查看我的座位' : '还没选座，赶紧挑一个'}
-        onStart={() => setView(state ? 'main' : 'login')}
+        onStart={() => {
+          track('cover_start', { logged_in: Boolean(state) })
+          setView(state ? 'main' : 'login')
+        }}
       />
     )
   }
@@ -117,6 +124,7 @@ export default function App() {
         siteKey={siteKey}
         onBack={() => setView('cover')}
         onLoggedIn={async () => {
+          track('login_success')
           await refresh()
           setView('main')
         }}
