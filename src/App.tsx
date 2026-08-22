@@ -118,7 +118,12 @@ export default function App() {
   if (view === 'cover') {
     return (
       <Cover
-        stats={{ tables: state ? openTopics.length : 20, seats: totalSeats, left: totalSeats - takenSeats }}
+        stats={{
+          tablesTotal: state ? state.topics.length : 20,
+          tables: state ? openTopics.length : 20,
+          seats: totalSeats,
+          left: totalSeats - takenSeats,
+        }}
         entryText={!state ? '开始选择话题与座位' : state.mySeat ? '查看我的座位' : '还没选座，赶紧挑一个'}
         onStart={() => {
           track('cover_start', { logged_in: Boolean(state) })
