@@ -167,7 +167,7 @@ export function createApp(resolve: (c: Context) => { db: Db; cfg: Cfg }) {
     const phone = normalizePhone(body.phone || '')
     const code = String(body.invite_code || '').trim().toUpperCase().slice(0, 24)
 
-    if (!name) return c.json({ error: '请填写姓名' }, 400)
+    // 姓名不再是登录凭据（报名时留的未必是真名），只有走邀请码新建记录时才需要它
     if (phone.length < 6) return c.json({ error: '请填写正确的手机号' }, 400)
 
     if (await loginThrottled(db, ip)) {
@@ -192,6 +192,8 @@ export function createApp(resolve: (c: Context) => { db: Db; cfg: Cfg }) {
         await log(db, null, 'login_fail', `need_code:${name}`, ip)
         return c.json({ error: '这个手机号不在报名名单里，请填写邀请码' }, 403)
       }
+      // 临时来宾库里没有记录，得留个名字，否则座位上显示不出是谁
+      if (!name) return c.json({ error: '请填写姓名，方便同桌认识你' }, 400)
       const invite = await db.first<{
         code: string
         kind: string
@@ -224,11 +226,7 @@ export function createApp(resolve: (c: Context) => { db: Db; cfg: Cfg }) {
       me = { id: newId, name, source: 'invite' }
       await log(db, newId, 'login_new', `code:${code}`, ip)
     } else {
-      // 白名单用户：姓名对不上直接拒（防止拿到别人手机号冒名顶替）
-      if (me.name !== name) {
-        await log(db, me.id, 'login_fail', `name_mismatch:${name}`, ip)
-        return c.json({ error: '姓名与报名信息不一致，请核对后重试' }, 403)
-      }
+      // 白名单用户：手机号命中即放行，姓名一律以报名表里的为准
       await log(db, me.id, 'login', '', ip)
     }
 

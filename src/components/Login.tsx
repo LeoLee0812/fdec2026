@@ -54,8 +54,8 @@ export function Login({ onBack, onLoggedIn, siteKey }: Props) {
 
   async function submit() {
     setErr('')
-    if (!form.name.trim()) return setErr('请填写姓名')
     if (form.phone.replace(/\D/g, '').length < 6) return setErr('请填写正确的手机号')
+    if (form.invite_code.trim() && !form.name.trim()) return setErr('请填写姓名，方便同桌认识你')
     if (siteKey && !tsToken) return setErr('请先完成人机校验')
     setBusy(true)
     try {
@@ -83,22 +83,10 @@ export function Login({ onBack, onLoggedIn, siteKey }: Props) {
           <span className="font-mono text-[11px] font-bold tracking-[.16em] text-cyan">STEP 01 / 身份确认</span>
           <h2 className="mt-2 text-[26px] font-black leading-tight">确认一下你是谁</h2>
           <p className="mt-2 text-[13px] text-fog">
-            请填写报名时使用的姓名与手机号。不在报名名单里的临时来宾，请填写工作人员给你的邀请码。
+            填写报名时使用的手机号即可。不在报名名单里的临时来宾，请填写工作人员给你的邀请码。
           </p>
 
           <div className="mt-6 space-y-4">
-            <div className="lg-field space-y-2">
-              <Label htmlFor="name">姓名</Label>
-              <Input
-                id="name"
-                value={form.name}
-                maxLength={20}
-                autoComplete="name"
-                placeholder="请输入姓名"
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="h-12 rounded-none bg-ink-2 text-base"
-              />
-            </div>
             <div className="lg-field space-y-2">
               <Label htmlFor="phone">手机号</Label>
               <Input
@@ -124,6 +112,22 @@ export function Login({ onBack, onLoggedIn, siteKey }: Props) {
                 className="h-12 rounded-none bg-ink-2 font-mono text-base tracking-widest"
               />
             </div>
+
+            {/* 临时来宾库里没有记录，填了邀请码才需要留个名字 */}
+            {form.invite_code.trim() && (
+              <div className="space-y-2">
+                <Label htmlFor="name">姓名</Label>
+                <Input
+                  id="name"
+                  value={form.name}
+                  maxLength={20}
+                  autoComplete="name"
+                  placeholder="请输入姓名，会显示在你的座位上"
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="h-12 rounded-none bg-ink-2 text-base"
+                />
+              </div>
+            )}
 
             {/* 蜜罐：真人看不见，脚本会老老实实填上 */}
             <input
