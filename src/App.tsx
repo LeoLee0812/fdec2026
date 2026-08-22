@@ -111,20 +111,14 @@ export default function App() {
     )
   }
 
-  const openTopics = state ? state.topics.filter((t) => !t.locked) : []
-  // 未登录时先用现场既定值兜底：20 张桌里 4 号是嘉宾桌，实际开放 19 桌 190 座
-  const totalSeats = state ? openTopics.reduce((n, t) => n + t.capacity, 0) : 190
-  const takenSeats = state ? openTopics.reduce((n, t) => n + t.taken.length, 0) : 0
+  // 封面统计按全场算：20 张桌 200 座，嘉宾桌也算在内
+  const totalSeats = state ? state.topics.reduce((n, t) => n + t.capacity, 0) : 200
+  const takenSeats = state ? state.topics.reduce((n, t) => n + t.taken.length, 0) : 0
 
   if (view === 'cover') {
     return (
       <Cover
-        stats={{
-          tablesTotal: state ? state.topics.length : 20,
-          tables: state ? openTopics.length : 19,
-          seats: totalSeats,
-          left: totalSeats - takenSeats,
-        }}
+        stats={{ tables: state ? state.topics.length : 20, seats: totalSeats, left: totalSeats - takenSeats }}
         entryText={!state ? '开始选择话题与座位' : state.mySeat ? '查看我的座位' : '还没选座，赶紧挑一个'}
         onStart={() => {
           track('cover_start', { logged_in: Boolean(state) })

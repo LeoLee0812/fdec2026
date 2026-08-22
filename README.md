@@ -6,8 +6,8 @@
 [![Deploy](https://img.shields.io/github/actions/workflow/status/LeoLee0812/fdec2026/deploy.yml?style=flat-square&label=deploy)](../../actions)
 
 FDEC 2026 前沿部署工程师大会（2026-08-22 · 杭州湖畔良仓）的**圆桌话题分组与选座系统**。
-20 张圆桌 × 10 人 = 200 座（其中 4 号桌是嘉宾桌，灰显不可选，实际开放 19 桌 190 座），
-参会者用报名时的姓名 + 手机号登录，在会场平面图上挑一张桌、挑一个位置。
+20 张圆桌 × 10 人 = 200 座（4 号桌是嘉宾桌，灰显不可选），参会者用报名时的姓名 + 手机号登录，
+在会场平面图上挑一张桌、挑一个位置。
 
 线上地址：<https://hangzhou0822.openfde.net>（Vercel，主入口）
 备用地址：<https://hangzhou0822.openfde.online>（Cloudflare Workers）

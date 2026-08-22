@@ -7,7 +7,7 @@ import { ThemeToggle } from './ThemeToggle'
 type Props = {
   onStart: () => void
   entryText: string
-  stats: { tablesTotal: number; tables: number; seats: number; left: number }
+  stats: { tables: number; seats: number; left: number }
 }
 
 export function Cover({ onStart, entryText, stats }: Props) {
@@ -89,7 +89,7 @@ export function Cover({ onStart, entryText, stats }: Props) {
             </p>
             <p className="flex items-center gap-2.5">
               <Users className="size-4 text-magenta" />
-              {stats.tablesTotal} 张会议桌 · {stats.tables} 个话题 · {stats.seats} 位工程师
+              {stats.tables} 张会议桌 · {stats.tables} 个话题 · {stats.seats} 位工程师
             </p>
           </div>
 
