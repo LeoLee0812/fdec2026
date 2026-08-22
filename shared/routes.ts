@@ -309,7 +309,7 @@ export function createApp(resolve: (c: Context) => { db: Db; cfg: Cfg }) {
 async function buildState(db: Db, me: Attendee) {
   const cfg = await getConfig(db)
   const [topicsRows, seatsRows] = await db.tx<any>([
-    { sql: 'SELECT id, table_no, title, description, owner_name, capacity, accent FROM topics ORDER BY table_no' },
+    { sql: 'SELECT id, table_no, title, owner_name, capacity, accent FROM topics ORDER BY table_no' },
     {
       sql: 'SELECT s.topic_id, s.seat_no, s.attendee_id, a.name FROM seats s JOIN attendees a ON a.id = s.attendee_id',
     },
@@ -326,7 +326,6 @@ async function buildState(db: Db, me: Attendee) {
     id: t.id,
     table_no: t.table_no,
     title: t.title,
-    description: t.description,
     owner_name: t.owner_name,
     capacity: t.capacity,
     accent: t.accent,

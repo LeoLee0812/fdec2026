@@ -29,7 +29,6 @@ CREATE TABLE topics (
   id          INTEGER PRIMARY KEY,
   table_no    INTEGER NOT NULL UNIQUE,   -- 桌号 1..20，与现场桌牌一致
   title       TEXT    NOT NULL,
-  description TEXT    NOT NULL DEFAULT '',
   owner_name  TEXT    NOT NULL DEFAULT '待定',
   capacity    INTEGER NOT NULL DEFAULT 10, -- 含 0 号发起人位
   accent      TEXT    NOT NULL DEFAULT 'cyan'

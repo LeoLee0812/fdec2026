@@ -4,7 +4,6 @@ export type Topic = {
   id: number
   table_no: number
   title: string
-  description: string
   owner_name: string
   capacity: number
   accent: AccentKey

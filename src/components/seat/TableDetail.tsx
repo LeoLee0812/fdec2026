@@ -44,9 +44,6 @@ export function TableDetail({ topic, hasSeatElsewhere, onClose, onPickSeat, onCa
             </span>
           </div>
           <h2 className="mt-3 text-[22px] font-black leading-snug">{topic.title}</h2>
-          <p className="mt-3 border-l-2 border-line bg-ink-2/60 px-3.5 py-3 text-[13.5px] leading-relaxed text-fog">
-            {topic.description || '围绕这个主题自由交流，欢迎带着你的经验、问题和好奇心加入。'}
-          </p>
           <div className="mt-4 flex items-center justify-between text-[13px]">
             <span className="text-fg/80">
               {topic.capacity} 人方桌 · 已坐 <b>{topic.taken.length}</b> 人
