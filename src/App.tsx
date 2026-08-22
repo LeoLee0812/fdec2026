@@ -112,7 +112,8 @@ export default function App() {
   }
 
   const openTopics = state ? state.topics.filter((t) => !t.locked) : []
-  const totalSeats = state ? openTopics.reduce((n, t) => n + t.capacity, 0) : 200
+  // 未登录时先用现场既定值兜底：20 张桌里 4 号是嘉宾桌，实际开放 19 桌 190 座
+  const totalSeats = state ? openTopics.reduce((n, t) => n + t.capacity, 0) : 190
   const takenSeats = state ? openTopics.reduce((n, t) => n + t.taken.length, 0) : 0
 
   if (view === 'cover') {
@@ -120,7 +121,7 @@ export default function App() {
       <Cover
         stats={{
           tablesTotal: state ? state.topics.length : 20,
-          tables: state ? openTopics.length : 20,
+          tables: state ? openTopics.length : 19,
           seats: totalSeats,
           left: totalSeats - takenSeats,
         }}
