@@ -83,12 +83,17 @@ export function VenueMap({ topics, myTopicId, onOpen }: Props) {
 
   return (
     <div ref={root} className="mx-auto max-w-4xl px-1 py-1">
-      {/* 顶部：左上角签到处 + 居中舞台（右侧留同宽占位，保证舞台真居中） */}
-      <div className="mb-6 flex flex-col gap-2 sm:mb-8 sm:flex-row sm:items-center sm:gap-4">
-        <div className="vm-stage shrink-0 border border-line bg-panel px-4 py-2 text-center text-[11px] font-bold tracking-[0.2em] text-fog sm:w-32 sm:py-3 sm:text-[11.5px]">
-          入口 · 签到处
+      {/* 顶部：签到处贴在舞台左边（手机上也并排，只是收窄成竖条）；桌面端右侧留同宽占位保证舞台居中 */}
+      <div className="mb-6 flex items-stretch gap-2 sm:mb-8 sm:gap-4">
+        <div className="vm-stage flex w-14 shrink-0 items-center justify-center border border-line bg-panel px-1 text-center text-[10px] font-bold leading-tight tracking-[0.08em] text-fog sm:w-32 sm:px-4 sm:text-[11.5px] sm:tracking-[0.2em]">
+          <span className="sm:hidden">
+            入口
+            <br />
+            签到处
+          </span>
+          <span className="hidden sm:inline">入口 · 签到处</span>
         </div>
-        <div className="vm-stage mx-auto w-full max-w-lg border border-line bg-panel px-5 py-3 text-center">
+        <div className="vm-stage mx-auto w-full max-w-lg border border-line bg-panel px-3 py-3 text-center sm:px-5">
           <p className="text-[15px] font-black tracking-[0.34em] sm:text-[17px]">舞台 / 主讲区</p>
           <p className="mt-1 text-[10.5px] tracking-[0.2em] text-fog sm:text-[11.5px]">湖畔良仓 21 号楼 · 8 月 22 日</p>
         </div>

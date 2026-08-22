@@ -34,3 +34,4 @@ db/invites.sql
 .vercel
 .env.local
 .env*
+db/attendees.pg.sql
