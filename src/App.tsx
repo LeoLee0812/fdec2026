@@ -62,6 +62,15 @@ export default function App() {
 
   const openTopic = state?.topics.find((t) => t.id === openId) ?? null
 
+  // 嘉宾桌等锁定的桌子不开放选座，点了只提示、不进详情页
+  function openTable(t: Topic) {
+    if (t.locked) {
+      toast('当前桌无法选择')
+      return
+    }
+    setOpenId(t.id)
+  }
+
   async function commit() {
     const p = pending
     setPending(null)
@@ -102,13 +111,14 @@ export default function App() {
     )
   }
 
-  const totalSeats = state ? state.topics.reduce((n, t) => n + t.capacity, 0) : 200
-  const takenSeats = state ? state.topics.reduce((n, t) => n + t.taken.length, 0) : 0
+  const openTopics = state ? state.topics.filter((t) => !t.locked) : []
+  const totalSeats = state ? openTopics.reduce((n, t) => n + t.capacity, 0) : 200
+  const takenSeats = state ? openTopics.reduce((n, t) => n + t.taken.length, 0) : 0
 
   if (view === 'cover') {
     return (
       <Cover
-        stats={{ tables: state?.topics.length ?? 20, seats: totalSeats, left: totalSeats - takenSeats }}
+        stats={{ tables: state ? openTopics.length : 20, seats: totalSeats, left: totalSeats - takenSeats }}
         entryText={!state ? '开始选择话题与座位' : state.mySeat ? '查看我的座位' : '还没选座，赶紧挑一个'}
         onStart={() => {
           track('cover_start', { logged_in: Boolean(state) })
@@ -183,10 +193,10 @@ export default function App() {
 
         {tab === 'map' ? (
           <div className="border border-line bg-panel/40 p-2 sm:p-4">
-            <VenueMap topics={state.topics} myTopicId={myTopic?.id} onOpen={(t) => setOpenId(t.id)} />
+            <VenueMap topics={state.topics} myTopicId={myTopic?.id} onOpen={openTable} />
           </div>
         ) : (
-          <TopicList topics={state.topics} myTopicId={myTopic?.id} onOpen={(t) => setOpenId(t.id)} />
+          <TopicList topics={state.topics} myTopicId={myTopic?.id} onOpen={openTable} />
         )}
       </main>
 

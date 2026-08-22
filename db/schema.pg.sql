@@ -31,7 +31,8 @@ CREATE TABLE topics (
   title       TEXT    NOT NULL,
   owner_name  TEXT    NOT NULL DEFAULT '待定',
   capacity    INTEGER NOT NULL DEFAULT 10, -- 含 0 号发起人位
-  accent      TEXT    NOT NULL DEFAULT 'cyan'
+  accent      TEXT    NOT NULL DEFAULT 'cyan',
+  locked      INTEGER NOT NULL DEFAULT 0  -- 1 = 嘉宾桌等不开放选座的桌子
 );
 
 -- 座位占用。seat_no = 0 固定为话题发起人，不开放选择

@@ -7,6 +7,7 @@ export type Topic = {
   owner_name: string
   capacity: number
   accent: AccentKey
+  locked: boolean
   taken: Seat[]
 }
 
@@ -20,7 +21,7 @@ export type VenueState = {
   mySeat: MySeat
 }
 
-export type AccentKey = 'cyan' | 'violet' | 'magenta' | 'amber'
+export type AccentKey = 'cyan' | 'violet' | 'magenta' | 'amber' | 'slate'
 
 /** 具体色值写在 index.css 的两套主题变量里，这里只引用，切主题时自动跟随 */
 export const ACCENT: Record<AccentKey, { main: string; soft: string; deep: string }> = {
@@ -28,6 +29,7 @@ export const ACCENT: Record<AccentKey, { main: string; soft: string; deep: strin
   violet: { main: 'var(--ac-violet)', soft: 'var(--ac-violet-soft)', deep: 'var(--ac-violet-deep)' },
   magenta: { main: 'var(--ac-magenta)', soft: 'var(--ac-magenta-soft)', deep: 'var(--ac-magenta-deep)' },
   amber: { main: 'var(--ac-amber)', soft: 'var(--ac-amber-soft)', deep: 'var(--ac-amber-deep)' },
+  slate: { main: 'var(--ac-slate)', soft: 'var(--ac-slate-soft)', deep: 'var(--ac-slate-deep)' },
 }
 
 export class ApiError extends Error {

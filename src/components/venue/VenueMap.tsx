@@ -13,7 +13,8 @@ type Props = {
 function MiniTable({ topic, mine }: { topic: Topic; mine: boolean }) {
   const a = ACCENT[topic.accent]
   const taken = new Set(topic.taken.map((s) => s.seat_no))
-  const full = topic.taken.length >= topic.capacity
+  const locked = topic.locked
+  const full = !locked && topic.taken.length >= topic.capacity
   // 与详情页同一套摆法：上下短边各 2 人，左右长边各 3 人
   const chairs = [
     { x: -13, y: -37, w: 18, h: 11 },
@@ -38,16 +39,16 @@ function MiniTable({ topic, mine }: { topic: Topic; mine: boolean }) {
           width={c.w}
           height={c.h}
           rx="2.5"
-          fill={taken.has(i) ? a.main : 'var(--chair)'}
-          fillOpacity={taken.has(i) ? 1 : 0.5}
+          fill={taken.has(i) && !locked ? a.main : 'var(--chair)'}
+          fillOpacity={locked ? 0.32 : taken.has(i) ? 1 : 0.5}
         />
       ))}
       <path
         d="M-28,-28 H28 V28 H-28 Z M-14,-14 H14 V14 H-14 Z"
         fillRule="evenodd"
-        fill="var(--paper)"
-        fillOpacity={full ? 0.4 : 1}
-        stroke={mine ? 'var(--alert)' : 'var(--paper-line)'}
+        fill={locked ? 'var(--paper-locked)' : 'var(--paper)'}
+        fillOpacity={locked ? 0.55 : full ? 0.4 : 1}
+        stroke={mine ? 'var(--alert)' : locked ? 'var(--paper-locked-line)' : 'var(--paper-line)'}
         strokeWidth={mine ? 2 : 1}
       />
       <text
@@ -55,7 +56,7 @@ function MiniTable({ topic, mine }: { topic: Topic; mine: boolean }) {
         y="5"
         fontSize="17"
         fontWeight="800"
-        fill={full ? 'var(--color-fog)' : mine ? 'var(--alert)' : 'var(--color-fg)'}
+        fill={locked || full ? 'var(--color-fog)' : mine ? 'var(--alert)' : 'var(--color-fg)'}
       >
         {String(topic.table_no).padStart(2, '0')}
       </text>
@@ -94,22 +95,27 @@ export function VenueMap({ topics, myTopicId, onOpen }: Props) {
           const left = t.capacity - t.taken.length
           const full = left <= 0
           const mine = t.id === myTopicId
+          const locked = t.locked
           return (
             <button
               key={t.id}
               onClick={() => onOpen(t)}
               title={t.title}
-              className="vm-table group flex flex-col items-center outline-none"
+              className={`vm-table group flex flex-col items-center outline-none ${locked ? 'cursor-not-allowed' : ''}`}
             >
-              <div className="w-full transition-transform duration-200 group-hover:-translate-y-0.5">
+              <div
+                className={`w-full transition-transform duration-200 ${locked ? '' : 'group-hover:-translate-y-0.5'}`}
+              >
                 <MiniTable topic={t} mine={mine} />
               </div>
               <span
                 className={`mt-0.5 whitespace-nowrap text-[10px] font-bold sm:text-[11.5px] ${
-                  mine ? 'text-[var(--alert)]' : full ? 'text-fog' : 'text-fg/70'
+                  locked ? 'text-fog' : mine ? 'text-[var(--alert)]' : full ? 'text-fog' : 'text-fg/70'
                 }`}
               >
-                {mine ? (
+                {locked ? (
+                  '嘉宾桌'
+                ) : mine ? (
                   <span className="inline-flex items-center gap-0.5">
                     <Check className="size-2.5" />
                     我的桌
@@ -120,8 +126,12 @@ export function VenueMap({ topics, myTopicId, onOpen }: Props) {
                   `余 ${left}`
                 )}
               </span>
-              <p className="mt-1 hidden line-clamp-2 px-1 text-center text-[12px] leading-snug text-fog transition group-hover:text-fg/90 sm:block">
-                {t.title}
+              <p
+                className={`mt-1 hidden line-clamp-2 px-1 text-center text-[12px] leading-snug text-fog transition sm:block ${
+                  locked ? 'opacity-70' : 'group-hover:text-fg/90'
+                }`}
+              >
+                {locked ? '嘉宾席 · 不可选' : t.title}
               </p>
             </button>
           )

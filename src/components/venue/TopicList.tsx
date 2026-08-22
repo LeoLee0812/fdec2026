@@ -27,18 +27,23 @@ export function TopicList({ topics, myTopicId, onOpen }: Props) {
         const left = total - t.taken.length
         const pct = Math.round((t.taken.length / total) * 100)
         const mine = t.id === myTopicId
+        const locked = t.locked
         return (
           <button
             key={t.id}
             onClick={() => onOpen(t)}
-            className="tp-card group relative overflow-hidden border border-line bg-panel/70 p-4 text-left transition hover:border-fg/30 hover:bg-panel"
+            className={`tp-card group relative overflow-hidden border border-line p-4 text-left transition ${
+              locked ? 'cursor-not-allowed bg-panel/40 opacity-70' : 'bg-panel/70 hover:border-fg/30 hover:bg-panel'
+            }`}
             style={mine ? { borderColor: 'var(--alert)' } : undefined}
           >
             <div className="flex items-start justify-between gap-3">
               <span className="font-mono text-[26px] font-black leading-none" style={{ color: a.main }}>
                 {String(t.table_no).padStart(2, '0')}
               </span>
-              {mine ? (
+              {locked ? (
+                <span className="border border-line px-2 py-0.5 text-[11px] font-bold text-fog">嘉宾桌</span>
+              ) : mine ? (
                 <span
                   className="flex items-center gap-1 px-2 py-0.5 text-[11px] font-bold"
                   style={{ background: 'var(--alert)', color: '#fff' }}
@@ -53,15 +58,24 @@ export function TopicList({ topics, myTopicId, onOpen }: Props) {
               )}
             </div>
 
-            <h3 className="mt-3 line-clamp-2 min-h-[44px] text-[15px] font-bold leading-snug text-fg/92">{t.title}</h3>
+            <h3
+              className={`mt-3 line-clamp-2 min-h-[44px] text-[15px] font-bold leading-snug ${
+                locked ? 'text-fog' : 'text-fg/92'
+              }`}
+            >
+              {t.title}
+            </h3>
 
             <div className="mt-3 flex items-center gap-2 text-[12px] text-fog">
               <Users className="size-3.5" />
-              {t.capacity} 人方桌 · 已坐 {t.taken.length} 人
+              {locked ? '现场嘉宾专席，不开放选座' : `${t.capacity} 人方桌 · 已坐 ${t.taken.length} 人`}
             </div>
 
             <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-fg/10">
-              <i className="block h-full rounded-full transition-all" style={{ width: `${pct}%`, background: a.main }} />
+              <i
+                className="block h-full rounded-full transition-all"
+                style={{ width: locked ? '100%' : `${pct}%`, background: a.main }}
+              />
             </div>
           </button>
         )

@@ -261,11 +261,13 @@ export function createApp(resolve: (c: Context) => { db: Db; cfg: Cfg }) {
     const cfg = await getConfig(db)
     if (cfg.open !== '1') return c.json({ error: '选座已锁定' }, 403)
 
-    const topic = await db.first<{ id: number; capacity: number }>(
-      'SELECT id, capacity FROM topics WHERE id = ?',
+    const topic = await db.first<{ id: number; capacity: number; locked: number }>(
+      'SELECT id, capacity, locked FROM topics WHERE id = ?',
       [topic_id],
     )
     if (!topic) return c.json({ error: '话题不存在' }, 404)
+    // 嘉宾桌等锁定的桌子不开放选座，前端会拦一道，这里再兜一道
+    if (Number(topic.locked) === 1) return c.json({ error: '当前桌无法选择' }, 403)
     if (!Number.isInteger(seat_no) || seat_no < 0 || seat_no >= Number(topic.capacity)) {
       return c.json({ error: '座位号不合法' }, 400)
     }
@@ -309,7 +311,7 @@ export function createApp(resolve: (c: Context) => { db: Db; cfg: Cfg }) {
 async function buildState(db: Db, me: Attendee) {
   const cfg = await getConfig(db)
   const [topicsRows, seatsRows] = await db.tx<any>([
-    { sql: 'SELECT id, table_no, title, owner_name, capacity, accent FROM topics ORDER BY table_no' },
+    { sql: 'SELECT id, table_no, title, owner_name, capacity, accent, locked FROM topics ORDER BY table_no' },
     {
       sql: 'SELECT s.topic_id, s.seat_no, s.attendee_id, a.name FROM seats s JOIN attendees a ON a.id = s.attendee_id',
     },
@@ -329,6 +331,7 @@ async function buildState(db: Db, me: Attendee) {
     owner_name: t.owner_name,
     capacity: t.capacity,
     accent: t.accent,
+    locked: Number(t.locked) === 1,
     taken: (byTopic.get(t.id) || []).map((s) => ({
       seat_no: s.seat_no,
       name: s.name,

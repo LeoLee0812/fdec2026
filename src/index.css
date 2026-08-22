@@ -89,6 +89,12 @@
   --ac-amber: #c19a5b;
   --ac-amber-soft: rgba(193, 154, 91, 0.14);
   --ac-amber-deep: #3a2e1a;
+  /* 嘉宾桌等锁定桌子用的中性灰 */
+  --ac-slate: #7c828e;
+  --ac-slate-soft: rgba(124, 130, 142, 0.14);
+  --ac-slate-deep: #24262b;
+  --paper-locked: #6f747d;
+  --paper-locked-line: #4a4e57;
 }
 
 html:not(.dark) {
@@ -118,6 +124,11 @@ html:not(.dark) {
   --ac-amber: #8a6621;
   --ac-amber-soft: rgba(138, 102, 33, 0.1);
   --ac-amber-deep: #f0e5cf;
+  --ac-slate: #6b7078;
+  --ac-slate-soft: rgba(107, 112, 120, 0.1);
+  --ac-slate-deep: #e4e5e8;
+  --paper-locked: #b9bcc2;
+  --paper-locked-line: #8d919a;
 }
 
 * {
